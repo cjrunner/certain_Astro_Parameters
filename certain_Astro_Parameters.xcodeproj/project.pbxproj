@@ -1,0 +1,367 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2B0B3B0125E29871009291EC /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2B0B3B0025E29871009291EC /* main.cpp */; };
+		2B0B3B1025E29C7A009291EC /* helpMsg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2B0B3B0F25E29C7A009291EC /* helpMsg.cpp */; };
+		2B0B3B1225E29CC0009291EC /* doChebyshev.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2B0B3B1125E29CC0009291EC /* doChebyshev.cpp */; };
+		2B0B3B1425E29D43009291EC /* doFabricateConnectionString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2B0B3B1325E29D43009291EC /* doFabricateConnectionString.cpp */; };
+		2B0B3B1625E29D9E009291EC /* otherFunctions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2B0B3B1525E29D9E009291EC /* otherFunctions.cpp */; };
+		2B0B3B1825E29DE5009291EC /* processCommandLineParameters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2B0B3B1725E29DE5009291EC /* processCommandLineParameters.cpp */; };
+		2B0B3B2525E2D9CF009291EC /* goExecuteSomeSQL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2B0B3B2325E2D9CF009291EC /* goExecuteSomeSQL.cpp */; };
+		2B3D528825E954AF00974542 /* findLocalTimeWhenEventOccurs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2B3D528625E954AF00974542 /* findLocalTimeWhenEventOccurs.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		2B0B3AFB25E29871009291EC /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		2B0B3AFD25E29871009291EC /* certain_Astro_Parameters-r4 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "certain_Astro_Parameters-r4"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2B0B3B0025E29871009291EC /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		2B0B3B0725E29951009291EC /* Constants.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Constants.hpp; sourceTree = "<group>"; };
+		2B0B3B0825E299D3009291EC /* Pclp.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Pclp.hpp; sourceTree = "<group>"; };
+		2B0B3B0925E29A39009291EC /* doingGast.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = doingGast.hpp; sourceTree = "<group>"; };
+		2B0B3B0A25E29A96009291EC /* helpMsg.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = helpMsg.hpp; sourceTree = "<group>"; };
+		2B0B3B0B25E29AF2009291EC /* doFabricateConnectionString.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = doFabricateConnectionString.hpp; sourceTree = "<group>"; };
+		2B0B3B0C25E29B62009291EC /* doChebyshev.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = doChebyshev.hpp; sourceTree = "<group>"; };
+		2B0B3B0D25E29BBC009291EC /* otherFunctions.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = otherFunctions.hpp; sourceTree = "<group>"; };
+		2B0B3B0E25E29C2E009291EC /* processingTable.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = processingTable.hpp; sourceTree = "<group>"; };
+		2B0B3B0F25E29C7A009291EC /* helpMsg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = helpMsg.cpp; sourceTree = "<group>"; };
+		2B0B3B1125E29CC0009291EC /* doChebyshev.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = doChebyshev.cpp; sourceTree = "<group>"; };
+		2B0B3B1325E29D43009291EC /* doFabricateConnectionString.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = doFabricateConnectionString.cpp; sourceTree = "<group>"; };
+		2B0B3B1525E29D9E009291EC /* otherFunctions.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = otherFunctions.cpp; sourceTree = "<group>"; };
+		2B0B3B1725E29DE5009291EC /* processCommandLineParameters.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = processCommandLineParameters.cpp; sourceTree = "<group>"; };
+		2B0B3B2325E2D9CF009291EC /* goExecuteSomeSQL.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = goExecuteSomeSQL.cpp; sourceTree = "<group>"; };
+		2B0B3B2425E2D9CF009291EC /* goExecuteSomeSQL.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = goExecuteSomeSQL.hpp; sourceTree = "<group>"; };
+		2B3D528625E954AF00974542 /* findLocalTimeWhenEventOccurs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = findLocalTimeWhenEventOccurs.cpp; sourceTree = "<group>"; };
+		2B3D528725E954AF00974542 /* findLocalTimeWhenEventOccurs.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = findLocalTimeWhenEventOccurs.hpp; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2B0B3AFA25E29871009291EC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2B0B3AF425E29871009291EC = {
+			isa = PBXGroup;
+			children = (
+				2B0B3AFF25E29871009291EC /* certain_Astro_Parameters */,
+				2B0B3AFE25E29871009291EC /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		2B0B3AFE25E29871009291EC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2B0B3AFD25E29871009291EC /* certain_Astro_Parameters-r4 */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2B0B3AFF25E29871009291EC /* certain_Astro_Parameters */ = {
+			isa = PBXGroup;
+			children = (
+				2B0B3B0725E29951009291EC /* Constants.hpp */,
+				2B0B3B0825E299D3009291EC /* Pclp.hpp */,
+				2B0B3B0925E29A39009291EC /* doingGast.hpp */,
+				2B0B3B0A25E29A96009291EC /* helpMsg.hpp */,
+				2B0B3B0B25E29AF2009291EC /* doFabricateConnectionString.hpp */,
+				2B0B3B0C25E29B62009291EC /* doChebyshev.hpp */,
+				2B0B3B0D25E29BBC009291EC /* otherFunctions.hpp */,
+				2B0B3B0E25E29C2E009291EC /* processingTable.hpp */,
+				2B0B3B2425E2D9CF009291EC /* goExecuteSomeSQL.hpp */,
+				2B3D528725E954AF00974542 /* findLocalTimeWhenEventOccurs.hpp */,
+				2B0B3B0F25E29C7A009291EC /* helpMsg.cpp */,
+				2B0B3B1125E29CC0009291EC /* doChebyshev.cpp */,
+				2B0B3B1325E29D43009291EC /* doFabricateConnectionString.cpp */,
+				2B0B3B0025E29871009291EC /* main.cpp */,
+				2B0B3B2325E2D9CF009291EC /* goExecuteSomeSQL.cpp */,
+				2B0B3B1525E29D9E009291EC /* otherFunctions.cpp */,
+				2B3D528625E954AF00974542 /* findLocalTimeWhenEventOccurs.cpp */,
+				2B0B3B1725E29DE5009291EC /* processCommandLineParameters.cpp */,
+			);
+			path = certain_Astro_Parameters;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		2B0B3AFC25E29871009291EC /* certain_Astro_Parameters */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2B0B3B0425E29871009291EC /* Build configuration list for PBXNativeTarget "certain_Astro_Parameters" */;
+			buildPhases = (
+				2B0B3AF925E29871009291EC /* Sources */,
+				2B0B3AFA25E29871009291EC /* Frameworks */,
+				2B0B3AFB25E29871009291EC /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = certain_Astro_Parameters;
+			productName = certain_Astro_Parameters;
+			productReference = 2B0B3AFD25E29871009291EC /* certain_Astro_Parameters-r4 */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2B0B3AF525E29871009291EC /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1010;
+				ORGANIZATIONNAME = CliffordCampo;
+				TargetAttributes = {
+					2B0B3AFC25E29871009291EC = {
+						CreatedOnToolsVersion = 10.1;
+					};
+				};
+			};
+			buildConfigurationList = 2B0B3AF825E29871009291EC /* Build configuration list for PBXProject "certain_Astro_Parameters" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 2B0B3AF425E29871009291EC;
+			productRefGroup = 2B0B3AFE25E29871009291EC /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2B0B3AFC25E29871009291EC /* certain_Astro_Parameters */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2B0B3AF925E29871009291EC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2B0B3B1825E29DE5009291EC /* processCommandLineParameters.cpp in Sources */,
+				2B0B3B1225E29CC0009291EC /* doChebyshev.cpp in Sources */,
+				2B0B3B1025E29C7A009291EC /* helpMsg.cpp in Sources */,
+				2B0B3B2525E2D9CF009291EC /* goExecuteSomeSQL.cpp in Sources */,
+				2B0B3B0125E29871009291EC /* main.cpp in Sources */,
+				2B0B3B1425E29D43009291EC /* doFabricateConnectionString.cpp in Sources */,
+				2B3D528825E954AF00974542 /* findLocalTimeWhenEventOccurs.cpp in Sources */,
+				2B0B3B1625E29D9E009291EC /* otherFunctions.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		2B0B3B0225E29871009291EC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				"WARNING_CFLAGS[arch=*]" = "-Wno-nullability-completeness";
+			};
+			name = Debug;
+		};
+		2B0B3B0325E29871009291EC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		2B0B3B0525E29871009291EC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = ZNUW8MGA28;
+				"GCC_WARN_UNUSED_VARIABLE[arch=*]" = YES;
+				"LIBRARY_SEARCH_PATHS[arch=*]" = (
+					/usr/local/gsl/gsl2.7/lib,
+					"/usr/local/pgsql/pgsql15beta1-exec/lib",
+					/usr/local/lib,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				"OTHER_CPLUSPLUSFLAGS[arch=*]" = (
+					"-D",
+					DODOUBLESEMICOLON,
+					"-D",
+					ALTERNATETYPEDEF,
+					"-D",
+					BRACKETSEARCH,
+				);
+				"OTHER_LDFLAGS[arch=*]" = (
+					"-lfabricateSQLr3",
+					"-ldatabaseOps",
+					"-ljulianToGregorian",
+					"-lm",
+					"-lpq",
+					"-lgsl.27",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)-r4";
+				"SYSTEM_HEADER_SEARCH_PATHS[arch=*]" = (
+					/usr/local/pgsql/pgsql15beta1/include,
+					/usr/local/gsl/gsl2.7/include,
+					/usr/local/include,
+				);
+				"USER_HEADER_SEARCH_PATHS[arch=*]" = (
+					/usr/local/include/databaseOps,
+					/usr/local/include/fabricateSQL,
+				);
+			};
+			name = Debug;
+		};
+		2B0B3B0625E29871009291EC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = ZNUW8MGA28;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				PRODUCT_NAME = "$(TARGET_NAME)-r4";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2B0B3AF825E29871009291EC /* Build configuration list for PBXProject "certain_Astro_Parameters" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2B0B3B0225E29871009291EC /* Debug */,
+				2B0B3B0325E29871009291EC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2B0B3B0425E29871009291EC /* Build configuration list for PBXNativeTarget "certain_Astro_Parameters" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2B0B3B0525E29871009291EC /* Debug */,
+				2B0B3B0625E29871009291EC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2B0B3AF525E29871009291EC /* Project object */;
+}

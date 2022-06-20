@@ -1,0 +1,1670 @@
+diff --git a/certain_Astro_Parameters.xcodeproj/project.pbxproj b/certain_Astro_Parameters.xcodeproj/project.pbxproj
+index 55942e5..3f2c79e 100644
+--- a/certain_Astro_Parameters.xcodeproj/project.pbxproj
++++ b/certain_Astro_Parameters.xcodeproj/project.pbxproj
+@@ -30,7 +30,7 @@
+ /* End PBXCopyFilesBuildPhase section */
+ 
+ /* Begin PBXFileReference section */
+-		2B0B3AFD25E29871009291EC /* certain_Astro_Parameters-r4 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "certain_Astro_Parameters-r4"; sourceTree = BUILT_PRODUCTS_DIR; };
++		2B0B3AFD25E29871009291EC /* certain_Astro_Parameters-r3 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "certain_Astro_Parameters-r3"; sourceTree = BUILT_PRODUCTS_DIR; };
+ 		2B0B3B0025E29871009291EC /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+ 		2B0B3B0725E29951009291EC /* Constants.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Constants.hpp; sourceTree = "<group>"; };
+ 		2B0B3B0825E299D3009291EC /* Pclp.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Pclp.hpp; sourceTree = "<group>"; };
+@@ -73,7 +73,7 @@
+ 		2B0B3AFE25E29871009291EC /* Products */ = {
+ 			isa = PBXGroup;
+ 			children = (
+-				2B0B3AFD25E29871009291EC /* certain_Astro_Parameters-r4 */,
++				2B0B3AFD25E29871009291EC /* certain_Astro_Parameters-r3 */,
+ 			);
+ 			name = Products;
+ 			sourceTree = "<group>";
+@@ -120,7 +120,7 @@
+ 			);
+ 			name = certain_Astro_Parameters;
+ 			productName = certain_Astro_Parameters;
+-			productReference = 2B0B3AFD25E29871009291EC /* certain_Astro_Parameters-r4 */;
++			productReference = 2B0B3AFD25E29871009291EC /* certain_Astro_Parameters-r3 */;
+ 			productType = "com.apple.product-type.tool";
+ 		};
+ /* End PBXNativeTarget section */
+@@ -315,7 +315,7 @@
+ 					"-lpq",
+ 					"-lgsl.27",
+ 				);
+-				PRODUCT_NAME = "$(TARGET_NAME)-r4";
++				PRODUCT_NAME = "$(TARGET_NAME)-r3";
+ 				"SYSTEM_HEADER_SEARCH_PATHS[arch=*]" = (
+ 					/usr/local/pgsql/pgsql15beta1/include,
+ 					/usr/local/gsl/gsl2.7/include,
+@@ -336,7 +336,7 @@
+ 				CODE_SIGN_STYLE = Manual;
+ 				DEVELOPMENT_TEAM = ZNUW8MGA28;
+ 				MACOSX_DEPLOYMENT_TARGET = 10.13;
+-				PRODUCT_NAME = "$(TARGET_NAME)-r4";
++				PRODUCT_NAME = "$(TARGET_NAME)-r3";
+ 			};
+ 			name = Release;
+ 		};
+diff --git a/certain_Astro_Parameters/Constants.hpp b/certain_Astro_Parameters/Constants.hpp
+index b116bab..c98ce1e 100644
+--- a/certain_Astro_Parameters/Constants.hpp
++++ b/certain_Astro_Parameters/Constants.hpp
+@@ -141,7 +141,7 @@ typedef struct {
+     double achievedValaue; //The value for which we're looking for the column under investingation to achieve
+ } pertinantDoProcessParameters;
+ typedef struct {
+-    char dochebyshev[16] = {'\0'}; // Contains DOCHEBYSHEV [11 characters + 5 unused. Initialized to all zeros.
++    char dochebyshev[12]; // Contains DOCHEBYSHEV [11 characters + 5 unused
+     int loopCounter;
+     int rc;
+     double *di;  //points to desired independent variable [Just one value, no array corresponding to fi]
+@@ -199,7 +199,7 @@ typedef struct {                //Represents one row of data returned from tbl_s
+          24591 |             1 | SunRise   |      7
+          24591 |             4 | NoonMin   |      7
+          24591 |            13 | resetERA  |      8
+-         24591 |            11 | StartDST  |      8
++        24591 |            11 | StartDST  |      8
+      */
+ } namesOfColumns ;
+ typedef struct {
+@@ -254,7 +254,7 @@ public:
+     myParameters *ptrArrayIndependent   = nullptr;  //                                                                        |
+     do_Chebyshev *dc              = nullptr;        //                                                                        |
+     timings *ptrPerformanceBuffer = nullptr;        //                                                                        |
+-    namesOfColumns * _Nullable ptrAllResultingDependentVaraiables = nullptr;        //                                        |
++    namesOfColumns *ptrAllResultingDependentVaraiables = nullptr;        //                                                   |
+     //  The above seven pointers point to calloc'd memory that we will need to free if these values are other than nullptr.   +
+     size_t outBufSize;
+     ConnStatusType connStatus;
+@@ -279,8 +279,8 @@ public:
+     
+     const char *ptrDefaultConnectionString = "dbname=LocalWeather host=localhost user=cjc port=5436";
+     const char *ptrConstructedConnectionString; //This connection string is constructed in real-time
+-    const double * _Nullable ptrIndependentVariable = nullptr;
+-    const double * _Nullable ptrDependentVariable = nullptr;
++    double *ptrIndependentVariable;
++    double *ptrDependentVariable;
+     double resultingDependentVariable; //Interpolated dependent variable
+     
+     /* ==W A R N I N G======W A R N I N G=======W A R N I N G===========W I L L    R O B I N S O N==================================== \
+@@ -292,17 +292,17 @@ public:
+     
+     //const char *ptrThisSRDef = "SRD";
+     //const char *ptrWhatThisSunRiseDefIs = "90.58333333";
+-    const char * _Nullable ptrC = ", ";
+-    const char * _Nullable ptrUserName = nullptr;
+-    const char * _Nullable ptrDatabaseName = nullptr;
+-    const char * _Nullable ptrHostName = nullptr;
+-    const char * _Nullable ptrPortName = nullptr;
+-    const char * _Nullable ptrThisDef = "ZDDEF";
+-    const char * _Nullable ptrWhatThisDefIs  = ZENITHDISTANCE_SR_OR_SS; //Default zenith distance defining sun rise or sun set.
+-    const char * _Nullable ptrThisPreamble = "PREAMBLE";
+-    const char * _Nullable ptrWhatThisPreambleIs = "DECLARE srnoonssportal CURSOR FOR ";  //Default Preamble
+-    const char * _Nullable ptrThisSiteid = "SITEID";
+-    const char * _Nullable ptrWhatThisSiteIdIs;   //There is NO Default Siteid
++    const char *ptrC = ", ";
++    const char *ptrUserName;
++    const char *ptrDatabaseName;
++    const char *ptrHostName;
++    const char *ptrPortName;
++    const char *ptrThisDef = "ZDDEF";
++    const char *ptrWhatThisDefIs  = ZENITHDISTANCE_SR_OR_SS; //Default zenith distance defining sun rise or sun set.
++    const char *ptrThisPreamble = "PREAMBLE";
++    const char *ptrWhatThisPreambleIs = "DECLARE srnoonssportal CURSOR FOR ";  //Default Preamble
++    const char *ptrThisSiteid = "SITEID";
++    const char *ptrWhatThisSiteIdIs;   //There is NO Default Siteid
+     const char *ptrThisSomeDate = "SOMEDATE";
+     const char *ptrWhatThisSomeDateIs = ""; //Default Date [i.e., no default date]
+     const char *ptrThisBeforeDataPoints = "BEFOREDATAPOINTS";
+@@ -318,7 +318,6 @@ public:
+     const char *ptrWhatThisEventDefinitionIs = ZENITHDISTANCE_SR_OR_SS;
+     const char *ptrWhatThis_SR_DefIs = ZENITHDISTANCE_SR;
+     const char *ptrWhatThis_SS_DefIs = ZENITHDISTANCE_SS;
+-    const char *ptrWhatThisGeocentricraSeasonIs = "6"; //Default is Summer.
+     // MAKE SURE TERM appears LAST before we go off and declare/define 2 dimensional (2D) arrays of pointers to pointers to characters.
+     const char *ptrThisTerm = "TERM";
+     const char *ptrWhatThisTermIs = "TERM";
+@@ -529,40 +528,6 @@ public:
+ //    PERHAPS we can get away with just one to serve all three: 
+ //    sqlTemplateERA0_GAST0_LAST0, and another like,
+ //    sunTemplateERA0_GAST0_LAST0
+-    
+-// 4SEASONS    4SEASONS    4SEASONS    4SEASONS    4SEASONS    4SEASONS    4SEASONS    4SEASONS    4SEASONS    4SEASONS    4SEASONS \
+-    The following worked in fabricateSQL3r3 on 2022-06-11
+-    const char *ptrEndCap;
+-    //   const char *ptrThisSomeYear = "YEAR";
+-    //    const char *ptrWhatThisSomeYearIs ="date_part('Year', now())"; //Defaults to current year.
+-    // NOT USED    const char *ptrThisSeason = "SEASON";
+-    const char *sqlTemplate4Seasons = "PREAMBLE SELECT *, date_part('Hour', lt) FROM tbl_sun_loc_site WHERE id \
+-    BETWEEN \
+-    - BEFOREDATAPOINTS + \
+-    (SELECT id FROM tbl_sun_loc_site WHERE events IS NULL AND siteid = SITEID AND abs(FIELD - ZDDEF) = \
+-    (SELECT  min(abs(FIELD - ZDDEF))  FROM tbl_sun_loc_site WHERE events IS NULL AND siteid=SITEID AND \
+-    date_part('Year',lt) = YEAR ) AND events IS NULL) \
+-    AND \
+-    + AFTERDATAPOINTS + \
+-    (SELECT id FROM tbl_sun_loc_site WHERE events is NULL AND siteid = SITEID AND abs(FIELD - ZDDEF) = \
+-    (SELECT  min(abs(FIELD - ZDDEF))  FROM tbl_sun_loc_site WHERE events IS NULL AND siteid=SITEID AND \
+-    date_part('Year',lt) = YEAR ) AND events IS NULL) \
+-    AND events IS NULL ORDER BY jdlocal ASC;POSTAMBLE";
+-    
+-    const char **sunTemplate4Seasons[9][2] = {                       /* 9 rows of 2 columns per row */   \
+-        {&ptrThisDef,              &ptrWhatThisGeocentricraSeasonIs},  /* [0][0] [0][1] */   \
+-        {&ptrThisPreamble,         &ptrWhatThisPreambleIs},            /* [1][0] [1][1] */   \
+-        {&ptrThisSiteid,           &ptrWhatThisSiteIdIs},              /* [2][0] [2][1] */   \
+-        {&ptrThisSomeYear,         &ptrWhatThisSomeYearIs},            /* [2][0] [2][1] */   \
+-        {&ptrThisBeforeDataPoints, &ptrWhatThisBeforeDataPointsIs},    /* [4][0] [4][1] */   \
+-        {&ptrThisAfterDataPoints,  &ptrWhatThisAfterDataPointsIs},     /* [5][0] [5][1] */   \
+-        {&ptrThisField,            &ptrWhatThisFieldIs},               /* [6][0] [6][1] */   \
+-        {&ptrThisPostamble,        &ptrWhatThisPostambleIs},           /* [7][0] [7][1] */   \
+-        {&ptrThisTerm,             &ptrWhatThisTermIs}};               /* [8][0] [8][1] */
+-    // 4SEASONS    4SEASONS    4SEASONS    4SEASONS    4SEASONS    4SEASONS    4SEASONS    4SEASONS    4SEASONS    4SEASONS    4SEASONS
+-    
+-    
+-    
+ //  ERA    ERA     ERA     ERA     ERA     ERA     ERA     ERA     ERA     ERA     ERA     ERA     ERA     ERA     ERA     ERA
+     const char *sqlTemplateERA0 ="PREAMBLE SELECT * from tbl_sun_loc_site where events IS NULL AND id BETWEEN -BEFOREDATAPOINTS + \
+     ( SELECT id  FROM tbl_sun_loc_site  WHERE FIELD = (SELECT min(FIELD)  FROM tbl_sun_loc_site WHERE lt::DATE='SOMEDATE' AND \
+@@ -616,27 +581,12 @@ public:
+         {&ptrThisTerm,             &ptrWhatThisTermIs}};
+ // LAST    LAST    LAST    LAST    LAST    LAST    LAST    LAST    LAST    LAST    LAST    LAST    LAST    LAST    LAST    LAST
+ // 4SEASONS    4SEASONS    4SEASONS    4SEASONS    4SEASONS    4SEASONS    4SEASONS    4SEASONS    4SEASONS    4SEASONS    4SEASONS
+-
++    const char *ptrEndCap;
+     const char *ptrThisSomeYear = "YEAR";
+     const char *ptrWhatThisSomeYearIs ="date_part('Year', now())"; //Defaults to current year.
+     const char *ptrThisSeason = "SEASON";
+-    const char *ptrWhatThisSeasonIs = "?"; // "0" => Spring, "6" => Summer, "12" => Autumn/Fall, "18" => Winter
+-    //2022-06-08T12:55:29 this version worked when plugged into psql  ***COMMENTED OUT THIS DUPLICATE ON 2022-06-11T10:04:12***  \
+-    const char *sqlTemplate4Seasons = "PREAMBLE SELECT *, date_part('Hour', lt) FROM tbl_sun_loc_site WHERE id \
+-    BETWEEN \
+-    - BEFOREDATAPOINTS + \
+-    (SELECT id FROM tbl_sun_loc_site WHERE events IS NULL AND siteid = SITEID AND abs(FIELD - SEASON) = \
+-    (SELECT  min(abs(FIELD - SEASON))  FROM tbl_sun_loc_site WHERE events IS NULL AND siteid=SITEID AND \
+-    date_part('Year',lt) = YEAR ) AND events IS NULL) \
+-    AND \
+-    + AFTERDATAPOINTS + \
+-    (SELECT id FROM tbl_sun_loc_site WHERE events is NULL AND siteid = SITEID AND abs(FIELD - SEASON) = \
+-    (SELECT  min(abs(FIELD - SEASON))  FROM tbl_sun_loc_site WHERE events IS NULL AND siteid=SITEID AND \
+-    date_part('Year',lt) = YEAR ) AND events IS NULL) \
+-    AND events IS NULL ORDER BY jdlocal ASC;POSTAMBLE";
+-//2022-06-08T12:53:24 What follows is the previous version of sqlTemplate4Seasons, modified to sqlTemplate_4_Seasons not to \
+-    conflict with existing code in otherFunctions.cpp. This can be eliminate when we're finished testing \
+-    const char *sqlTemplate_4_Seasons = "PREAMBLE SELECT * FROM tbl_sun_loc_site WHERE id \
++    const char *ptrWhatThisSeasonIs = "0"; // "0" => Spring, "6" => Summer, "12" => Autumn/Fall, "18" => Winter
++    const char *sqlTemplate4Seasons = "PREAMBLE  SELECT * FROM tbl_sun_loc_site WHERE id \
+     BETWEEN \
+     - BEFOREDATAPOINTS + \
+     (SELECT id FROM tbl_sun_loc_site WHERE events IS NULL AND siteid = SITEID  AND \
+@@ -647,16 +597,16 @@ public:
+     (SELECT id FROM tbl_sun_loc_site WHERE events is NULL AND siteid = SITEID  AND \
+         FIELD - SEASON = (SELECT  min(abs(FIELD-SEASON))  FROM tbl_sun_loc_site WHERE events IS NULL AND siteid=SITEID AND \
+         date_part('Year',lt) = YEAR) AND events IS NULL) \
+-    AND events IS NULL ORDER BY jdlocal;POSTAMBLE"; \
++    AND events IS NULL ORDER BY jdlocal;POSTAMBLE";
+     const char **sunTemplate4SEASONS[9][2] = {     \
+         {&ptrThisPreamble,         &ptrWhatThisPreambleIs},     \
+-        {&ptrThisSeason,           &ptrWhatThisSeasonIs},  \
+         {&ptrThisSiteid,           &ptrWhatThisSiteIdIs},       \
+         {&ptrThisSomeYear,         &ptrWhatThisSomeYearIs},   \
+         {&ptrThisBeforeDataPoints, &ptrWhatThisBeforeDataPointsIs}, \
+         {&ptrThisAfterDataPoints,  &ptrWhatThisAfterDataPointsIs},  \
+         {&ptrThisField,            &ptrWhatThisFieldIs}, \
+         {&ptrThisPostamble,        &ptrWhatThisPostambleIs}, \
++        {&ptrThisSeason,           &ptrWhatThisSeasonIs}, \
+         {&ptrThisTerm,             &ptrWhatThisTermIs}};
+ // 4SEASONS    4SEASONS    4SEASONS    4SEASONS    4SEASONS    4SEASONS    4SEASONS    4SEASONS    4SEASONS    4SEASONS    4SEASONS
+ //  SUNRISE    SUNRISE    SUNRISE    SUNRISE    SUNRISE    SUNRISE    SUNRISE    SUNRISE    SUNRISE    SUNRISE    SUNRISE    SUNRISE
+@@ -795,7 +745,6 @@ public:
+ #define ERA     7
+ #define GAST    8
+ #define LAST    9
+-#define FALL    AUTUMN
+     enum entryOrder { _sunrise=SUNRISE, _sunset=SUNSET, _noonmin=NOONMIN, _spring=SPRING, _summer=SUMMER,
+     _autumn=AUTUMN, _winter=WINTER, _era=ERA, _gast=GAST, _last=LAST} entryOrder;
+     typedef struct eP { // Map of myEvents array of pertinant processing parameters
+@@ -862,12 +811,11 @@ public:
+     string insertIntoClose_non_const = "');";
+     int lowerIndex=0;
+     int upperIndex=0;
+-    char ** _Nullable some2Darray = nullptr;
+-
+-    const char * _Nullable some1Darray;
++    const char ***some2Darray;
++    const char *some1Darray;
+     int some2DArraySize=0;
+     int some1DArraySize=0;
+-    char * _Nullable lastSemiColon=nullptr;
++    char *lastSemiColon=nullptr;
+  //   PGconn *conn;
+  //   PGresult *res;
+     string buf; // NOT a c-string buffer!!
+@@ -875,7 +823,7 @@ public:
+     double resultJDLOCAL;
+     double ongoingResult;
+ //    bool reverseSort = false;  //Set to true whenever we do processSR
+-    myParameters * _Nullable ptrTemp ;
++    myParameters *ptrTemp;
+     myParameters *ptrDependentUpper;
+     myParameters *ptrDependentLower;
+     myParameters *ptrIndependentUpper;
+@@ -885,11 +833,11 @@ public:
+     int numberOfLoops = 0;
+     int numberOfEntries = 0;
+     int numberOf_BS_Entries = 0;
+-    int * _Nullable bs_rc=0;
++    int *bs_rc=0;
+     double a;  //a is used in bracket_search
+     double b;  //b is used in  bracket_search
+     double delta;
+-    const char * _Nullable  ptrToGregorian;
++    const char *ptrToGregorian;
+     const char *iI = &INSERT_INTO_BUFFER[0];
+     bool executeTheSQL = true; // Default to execute the SQL this astroParameter executable generates.
+     const char *ptrConnectionString;
+@@ -905,8 +853,6 @@ public:
+     ~Constants(void);
+  //   int bracket_search (const void *, const void *);
+     void doFabricateConnectionString(void);
+-    void reallocateArrays(Constants &, bool doInterchange = false);
+-    void freeCallocdMemory(Constants& v); // Added 2022-06-18T09:47:58 as common processing for the various processXYZ functions
+ };
+ int bracket_search (const void *, const void *);
+ 
+diff --git a/certain_Astro_Parameters/Pclp.hpp b/certain_Astro_Parameters/Pclp.hpp
+index a0000ba..3e225b6 100644
+--- a/certain_Astro_Parameters/Pclp.hpp
++++ b/certain_Astro_Parameters/Pclp.hpp
+@@ -121,7 +121,7 @@ public:
+     const char *ptrWhatThis_SR_DefIs__;         //Should point to base class' ptrWhatThis_SR_DefIs
+     const char *ptrWhatThis_SS_DefIs__;         //Should point to base class' ptrWhatThis_SS_DefIs
+     /////////////////////////////////////////////
+-    const char   * _Nullable  ptrWhatThisSiteIdIs__ ;        //Should point to base class' ptrWhatThisSiteIdIs
++    const char   *ptrWhatThisSiteIdIs__;        //Should point to base class' ptrWhatThisSiteIdIs
+     multimap<string, int> commandLineArguments {
+         {"--siteid", _SITEID_},
+         {"-S", _SITEID_},
+diff --git a/certain_Astro_Parameters/doChebyshev.cpp b/certain_Astro_Parameters/doChebyshev.cpp
+index 546ae00..5cd33d3 100644
+--- a/certain_Astro_Parameters/doChebyshev.cpp
++++ b/certain_Astro_Parameters/doChebyshev.cpp
+@@ -65,8 +65,7 @@ double cf (double x, void *p) {  //cf stands for call-back function. \
+     x contains the value provided by the GSQL routine; \
+     numberOfEntries++;  //bump-up the number of times we've entered this gsl call-back function
+     con->dc = (do_Chebyshev *)p; //Recast input parameter, p, from type `pointer-to-void` to type `pointer-to-do_Chebyshev`
+-    con->dc->workTrialDependent = MAXFLOAT; //Initialize this variable to something unusually huge so we know, when stepping \
+-through debugger, that this value has been deliberately changed.
++    con->dc->workTrialDependent = MAXFLOAT; //Initialize this variable to something unusually huge so we know, when stepping through debugger, that this value has been deliberately changed.
+     
+ #ifdef BRACKETSEARCH  //When BRACKETSEARCH is specified as a compiler option then we are doing a binary search through the array \
+ of independent variables.
+diff --git a/certain_Astro_Parameters/helpMsg.cpp b/certain_Astro_Parameters/helpMsg.cpp
+index 8964eec..ee63c78 100644
+--- a/certain_Astro_Parameters/helpMsg.cpp
++++ b/certain_Astro_Parameters/helpMsg.cpp
+@@ -26,22 +26,40 @@
+ void Pclp::helpMsg(void) {
+     printf("The purpose of this program, named %s,\n", ptr_nameOfThisProgram);
+     printf("is to drive the testing of the dylib named libfabricateSQLr3. The parameters driving this test are as follows:\n");
+-    printf("\n--siteid or -S: defines the siteid as defined in database LocalWeather, on any working port, \
++    if (ptrWhatThisSiteIdIs != NULL)
++    {
++        printf("\n--siteid or -S: defines the siteid as defined in database LocalWeather, on any working port, \
++           \ntable named tbl_site_names [Default %s]\n", ptrWhatThisSiteIdIs);
++    } else {
++        printf("\n--siteid or -S: defines the siteid as defined in database LocalWeather, on any working port, \
+                \ntable named tbl_site_names [Default: No Default]\n");
++    }
+     printf("\n--somedate or -D: defines the date of interest. MANDATORY. Must be in YYYY-MM-DD format\n");
+-    printf ("\n--beforedatapoints or -b: defines the number of tuples (rows) prior to the data of interest [Default: No Default]\n");
+-    printf("\n--afterdatapoints or -a: defines the number of tuples (rows) aftr the data of interest [Default: No Default]\n");
++    if (ptrWhatThisSiteIdIs != NULL) {
++        printf("\n--beforedatapoints or -b: defines the number of tuples (rows) prior to the data of interest [Default %s]\n", \
++           ptrThisBeforeDataPoints);
++    } else {
++        printf ("\n--beforedatapoints or -b: defines the number of tuples (rows) prior to the data of interest [Default: No Default]\n");
++    }
++     if (ptrThisAfterDataPoints != NULL) {
++         printf("\n--afterdatapoints or -a: defines the number of tuples (rows) aftr the data of interest [Default %s]\n", \
++           ptrThisAfterDataPoints);
++     } else {
++         printf("\n--afterdatapoints or -a: defines the number of tuples (rows) aftr the data of interest [Default: No Default]\n");
++     }
++    if (ptrThisAfterDataPoints != NULL) {
+     printf("\n--field or -F: Specifies the field name. Field names are as described by LocalWeather database's table, \
++           \nnamed tbl_sun_loc_site. Most fields (table columns) are of double precision data type. [Default: %s]\n", \
++           ptrWhatThisFieldIs);
++    } else {
++        printf("\n--field or -F: Specifies the field name. Field names are as described by LocalWeather database's table, \
+                \nnamed tbl_sun_loc_site. Most fields (table columns) are of double precision data type. [Default: No Default]\n");
++    }
+     printf("\n--event or -E: Specifies the event for which fabricateSQLr3 will create SQL to extract the data from tbl_sun_loc_site \
+-           \nto characterize the event of interest. Typical events are SunRise (specified by -E SR), SunSet (specified by -E SS), \
+-           \nnoon (specified by -E NoonMin), or Earth Rotation Angle = 0 (Specified by -E ERA) \
+-           \nOther events for future implementation are: \
+-           \n\tgast = 0 (-E gast); \
+-           \n\tlast = 0 (-E last); \
+-           \n\tarrival of Spring (-E Spring); \
+-           \n\tarrival of Summer (-E Summer); \
+-           \n\tarrival of Fall or Autumn (-E Fall or -E Autumn), arrival of Winter (-E Winter)\n");
++           \nto characterize the event of interest. Typical events are SunRise (specified by -E SR), SunSet (specified by -E SS), noon \
++           \n(specified by -E NoonMin), or Earth Rotation Angle = 0 (Specified by -E ERA)\n Other events for future implementation are gast = 0 \
++           \n(-E gast), last = 0 (-E last), arrival of Spring (-E Spring), arrival of Summer (-E Summer), arrival of Fall or Autumn (-E Fall or \
++           \n-E Autumn), arrival of Winter (-E Winter)\n");
+     printf("\n--eventValue or -e: Value which we require the --event/-E to assume\n");
+     printf("\n--sunrisedefiningion or -r: specifies the zenithdistance when sunrise occurs. [Default: %sº]\n", ptrWhatThisDefIs );
+     printf("\n--sunsetdefiningion or -t: specifies the zenithdistance when sunset occurs. [Default: %sº]. Most unusual to be \
+@@ -53,7 +71,8 @@ void Pclp::helpMsg(void) {
+     printf("\n--db3 or -3: View development of parameters that are sent to the libfabricateSQLr3.dylib.\n");
+     printf("\n--db4 or -4: debug fabricateSQL3.dylib itself so this dylib displays its intermediate results as its processing \
+            \nproceeds\n");
+-    printf("\n--db5 or -5: display messages returned by destructors describing necessary clean-up activity. \n");
++    printf("\n--db5 or -5: display messages returned by destructors describing necessary clean-up activity. \n"); \
++   
+     printf("\n--modulo or -m: incases of multiple row output from SQL execution, specifies the number of rows output before column \
+            \nheader/titles are output. Default value is %d. A value of 1 results in output of just the first \
+            \nheader/title line. A value of 0 supresses all title/header output.\n", modulo_lines_perPage);
+@@ -65,10 +84,9 @@ void Pclp::helpMsg(void) {
+     printf("\n--port or -p: The port associated with this database [default=5436]\n");
+     printf("\n--host or -H: The host assocated with this database [default=localhost]\n");
+     printf("-database or -d: The name of this database [default=LocalWeather]\n");
+-    printf("\n--Year or -Y: Used in seasonal processing. Specifies the year in which we assess the date and time of the arrival \
+-           \nsummer, or fall or winter, or spring. Requires specifying the --season or -s parameter, too. For the --season or -s switch: \
+-           \n\tto specify spring, then -s 0;\n\tto specify summer, then -s 6; \n\tto specify fall/autumn, then -s 12; \
+-           \n\tto specity winter, then -s 18");
++    printf("\n--Year or -Y: Specifies the year in which we assess the date and time of the arrival of summer, or fall or winter, or\
++           \nspring. Requires specifying the --season or -s parameter, too. For the --season of -s switch: \n\tto specify spring, \
++           then -s 0;\n\tto specify summer, then -s 6; \n\tto specify fall/autumn, then -s 12; \n\tto specity winter, then -s 18");
+     printf("\n--season or -s: Takes on an integer value to specify the season. See --Year, above, for guidance on providing \
+            \nappropriate paramter for --season or -s keywords. When specifying season, we assume the field parameter will be \
+            \ngeocentricra, however by providing the --field, or -f,  parameter with the parameter of topocentricra, equally valid \
+diff --git a/certain_Astro_Parameters/main.cpp b/certain_Astro_Parameters/main.cpp
+index ce26196..45aacbb 100644
+--- a/certain_Astro_Parameters/main.cpp
++++ b/certain_Astro_Parameters/main.cpp
+@@ -92,16 +92,11 @@ int main(int argc, const char * argv[]) {
+     which pointer-to-function, obtained from array ptrToFunction, to use for processing this event.
+     if (c.db1__) cout << "c.eventAsIndexNumber " << c.eventAsIndexNumber << endl;
+     c.rc = c.ptrToFunction[c.eventAsIndexNumber][DOSETUP](c, 0); //Process the event by setting up for the call to libfabricateSQLr3.dylib.
+-    reviewDo(c, "doSummer1"); //Added 2022-06-09T09:30:18
+     c.charactersWrittenToFile = 0; //Reset this
+ 
+     c.outBufSize = (c.some1DArraySize>>1) + c.some1DArraySize;  //Make outBufSize which is 50% larger than the size of the SQL template.
+   //  c.ptr_cbb_results = (char *)c.cbb_results;
+-    reviewDo(c, "doSummer2"); //Added 2022-06-09T09:30:18
+-//2022-06-09T09:26:27 changed *c.some2Darray to c.some2Darray[0]. 2022-06-09T10:23:32 Added the scope resolution operator \
+-Constants:: to some2Darray because both the Constants and Pclp have the variable named some2Darray and these variables \
+-are both of the same type!
+-    fabricateSQLr3(c.ptrPerformanceBuffer, (const char **)c.Constants::some2Darray, c.some1Darray, c.numberOf2Dentries, c.ptr_cbb_results, &c.outBufSize, c.db4__);
++    fabricateSQLr3(c.ptrPerformanceBuffer, *c.some2Darray, c.some1Darray, c.numberOf2Dentries, c.ptr_cbb_results, &c.outBufSize, c.db4__);
+     c.Constants::j = (int)c.outBufSize; //Constants::j means use the variable j found in class Constants rather than the \
+     variable j found in class Pclp:: (i.e., Pclp::j). NOTE: the we expect the last character in this 1D array to be a \
+     '\0` (NULL) character
+@@ -269,7 +264,7 @@ Constants::Constants(void) {
+     ptrSQLTemplateERA0 = &sqlTemplateERA0[0];
+ }
+ Constants::~Constants(void) {
+-//Cleanup and return resources (e.g.  calloc'd memory, open files, postgres resources) to operating system
++    //Cleanup and return resources (e.g.  calloc'd memory, open files, postgres resources) to operating system
+     cout << "Entered the Constants::~Constants Destructors" << endl;
+     j=1;
+     if (ptrPerformanceBuffer != nullptr) {
+diff --git a/certain_Astro_Parameters/otherFunctions.cpp b/certain_Astro_Parameters/otherFunctions.cpp
+index 1945bd0..6305261 100644
+--- a/certain_Astro_Parameters/otherFunctions.cpp
++++ b/certain_Astro_Parameters/otherFunctions.cpp
+@@ -1,4 +1,3 @@
+-
+ //
+ //  otherFunctions.cpp
+ //  certain_Astro_Parameters
+@@ -17,196 +16,24 @@
+ //  Created by Clifford Campo on 11/25/20.
+ //  Copyright © 2020 CliffordCampo. All rights reserved.
+ //
+-#include <stdio.h>
++
+ #include "otherFunctions.hpp"
+ #include "Pclp.hpp"
+ #include <strstream>
+ #include <iomanip>
+ #include <sstream>
+ #include "doingGast.hpp"
+-void freeCallocdMemory(Constants& v) {
+-    if (v.ptrArrayIndependent) {
+-        free(v.ptrArrayIndependent);   //This was acquired in function goExecuteSomeSQL
+-        v.ptrArrayIndependent = nullptr;
+-    }
+-    if (v.ptrArrayDependent) {
+-        free(v.ptrArrayDependent);      //This was acquired in function goExecuteSomeSQL
+-        v.ptrArrayDependent = nullptr;
+-    }
+-    if (v.ptrAllResultingDependentVaraiables) {
+-        free(v.ptrAllResultingDependentVaraiables); //This memory was acquired by calling process… function
+-        v.ptrAllResultingDependentVaraiables = nullptr;
+-    }
+-}
+-void reallocateArrays(Constants &v, bool doInterchange = false) {     //----Added 2022-06-16T08:46:46
+-    // a) Reassigns ptrArrayIndependent to point to the jdlocal values found in ptrArrayDependent.
+-    // b) if necessary call iterchange so the jdlocal variables are in ascending order as demanded by the gsl interpolation routines
+-    // c) Assign to poointer ptrArrayDependent a newly calloc'd memory where the various dependent variables will be stored.
+-    
+-    //Free this because we won't be needing to point to an array of zenithdistance values because there is only ONE zenithdistance \
+-    value we will use and that's what's in v.eventParameter and v.resultJDLOCAL is the local time that we achieved the desired \
+-    value of ZENITHDISTANCE_SR_OR_SS.
+-    free(v.ptrArrayIndependent); //Free array of independent variables, containing a 1D array of no longer needed variables (e.g., \
+-    LAST [used for estimating when LAST = 0 hours], or GAST [used for estimating when GAST = 0 hours], or ERA [used for estimating \
+-    when ERA = 0º], or zenithdistance [used for estimating when zenithdistance = 90.58333…º for determining sunrise or sunset], or \
+-    geocentricra = 0, 6, 12, or 18 [used for determining the occurance of Spring, Summer, Fall/Autumn, or Winter, respectively], \
+-    or topocentricra = 0, 6, 12, or 18 [used for determining the occurance of Spring, Summer, Fall/Autumn, or Winter, respectively].
+-    //At this point v.resultingDependentVariable points to the local time, in julian day format. This time will become the the \
+-    independent variable;
+-    if (doInterchange) interchange (v.ptrArrayDependent, v.numberOfRows); //Interchange the dependent variables (jdlocal) back to \
+-    original order because we've done this interchange operation twice. jdlocal becomes the independent variable for all subsequent \
+-    calls to by doInterpolation to doChebyshev. doInterpolation’s job is to put the dependent variables into the dependent variable \
+-    array.
+-    v.ptrArrayIndependent = v.ptrArrayDependent; //ReAssign v.ptrArrayIndependent to point to the array of jdlocal times which \
+-    WAS in the array of Dependent Varaibles (v.ptrArrayDependent)
+-    //At this point v.resultingDependentVariable points to the local time, in julian day format. This time will become the the \
+-    independent variable;
+-    v.ptrArrayDependent = (myParameters *)calloc(sizeof(myParameters), v.numberOfRows); //Now reAllocate a new \
+-    Array of Dependent Variables to the variable v.ptrArrayDependent. This array will be used by doInterpolation.
+-}
+-void genericSeasonProcessing(Constants& v, int Season) {
+-    for (v.i=0; v.i<v.numberOfRows; v.i++) { // +1
+-        if ( v.i > 0 && (fabs((v.allFetchedData  + v.i)->geocentricra < fabs((v.allFetchedData + v.i -1)->geocentricra)) ) ) {
+-            // Above conditional statement checks to see that the current geocentricra value is greater than the previous geocentricra's value \
+-            2022-06-12T13:04:20  had to change to v.…->geocentricra from v.…-> gast! If current value is less than previous independent value, \
+-            then add modulus to the current value, thus satisfying gsl interpolation routine's requirement that arrays be monotonically \
+-            increasing. I have never noticed an instance where geocentricra rolled over.
+-            (v.allFetchedData + v.i)->geocentricra += (double)v.ptr_eP->modulous; //2022-06-12T13:00:41 had to change to \
+-            (v.allFetchedData + v.i)->geocentricra from (v.allFetchedData + v.i)->gast !!!
+-        } else {
+-            (v.ptrArrayIndependent + v.i)->dbl_value   = (v.allFetchedData + v.i)->geocentricra; //2022-06-12T12:58:39 had to \
+-            change to (v.allFetchedData + v.i)->geocentricra from (v.allFetchedData + v.i)->gast. A real FuckUp!!
+-        }  // end of if/else
+-        (v.ptrArrayIndependent + v.i)->index = v.i;
+-        (v.ptrArrayDependent + v.i)->dbl_value     = (v.allFetchedData + v.i)->jdlocal;
+-        (v.ptrArrayDependent + v.i)->index = v.i;
+-    }     // -1 End of for loop
+-    //
+-    //
+-    //        points to array of associated dependent variables -------------------------------------------+
+-    //        points to array of independent variables ---------------------------------+                  |
+-    //        points to THE desired independent variable -------+                       |                  |
+-    //        points to chebyshev order -----+                  |                       |                  |
+-    //        points to class --+            |                  |                       |                  |
+-    //                          |            |                  |                       |                  |
+-    //                          V            V                  V                       V                  V
+-    v.resultJDLOCAL=doChebyshev(v,    v.numberOfRows, &v.eventParameter, v.ptrArrayIndependent, v.ptrArrayDependent);
+-    
+-    reallocateArrays(v);
+-    v.ptrAllResultingDependentVaraiables = (namesOfColumns *)calloc(sizeof(namesOfColumns), 1);
+-    (v.ptrAllResultingDependentVaraiables + JDLOCAL)->jdlocal = v.resultJDLOCAL;
+-    (v.ptrAllResultingDependentVaraiables + Season)->geocentricra = v.eventParameter;   //This Becomes the aspirational value \
+-    as presented via the -e command line parameter
+-    if ( (v.ptrAllResultingDependentVaraiables + Season)->geocentricra >=  (double)v.ptr_eP->modulous )  \
+-        (v.ptrAllResultingDependentVaraiables + Season)->geocentricra  -=  (double)v.ptr_eP->modulous;  //If necessary, back-out the modulous!
+-    v.buf.reserve(1500); //Without this reserve method the capacity of the v.buf is 22 characters.
+-    v.buf.clear(); //Make sure this c++ buffer is clean
+-    if(v.db2__) {
+-        cout << "The max size of v.buf is: " << v.buf.max_size() << ",\nthe capacity of v.buf is: " << v.buf.capacity() << endl;
+-        cout << "After doing v.buf.reserve(1500), the max size of v.buf is now: " << v.buf.max_size() << \
+-        " characters (i.e. 2^64), the capacity of v.buf is: " << v.buf.capacity() << " characters." << endl;
+-    }
+-    v.buf += v.insertIntoStart; //Initialize v.buf with the “INSERT INTO … blah, blah, blah” SQL ”INSERT INTO“  preliminaries
+-    v.ptrToGregorian = julianToGregorian(&v.resultJDLOCAL, 0) ; //julianToGregorian is a recently (2020-12-02) added dylib. Perhaps \
+-    I should add gregorianToJuian to my dylib library?
+-    //    v.buf = v.ptrToGregorian; //Convert the pointer-to-cString to a c++ string in buf. buf is an accumulator of c++ strings
+-    if (v.db2__) cout << "01. v.ptrToGregorian looks like: " << v.ptrToGregorian << endl;
+-    v.buf += string(v.ptrToGregorian); // + "', "; // need to convert v.ptrToGregorian from type c-string to type c++string. Then \
+-    begin accumulating the results of each "Chebyshev'd" parameter in a c++ string buffer named buf, separating each parameter with \
+-    a comma.
+-    v.buf += "', ";
+-    (v.ptrAllResultingDependentVaraiables + SITEID)->siteid = (v.allFetchedData + SITEID)->siteid;  //SITEID doesn't change
+-    
+-    //-->TOPOCENTRICRA is Modulous 24 and rolls-over once per year
+-    doInterpolation(v, TOPOCENTRICRA, "02 TOPOCENTRICRA ", v.ptrC, TOPOCENTRICRA_MODULO24);
+-    //TOPOCENTRICDEC ranges between +23.4… degrees and -23.4… degrees and becomes zero at Vernal Equinox (Spring)
+-    doInterpolation(v, TOPOCENTRICDEC, "03 TOPOCENTRICDEC ", v.ptrC, 0);
+-    //TOPOCENTRICDIS
+-    doInterpolation(v, TOPOCENTRICDIS, "04 TOPOCENTRICDIS ", v.ptrC, 0);
+-    //-->AZIMUTH is Modulous 360 and rolls-over daily
+-    doInterpolation(v, AZIMUTH, "05 AZIMUTH ", v.ptrC, AZIMUTH_MODULO360);
+-    //ZENITHDISTANCE
+-    doInterpolation(v, ZENITHDISTANCE, "06 ZENITHDISTANCE ", v.ptrC, 0);
+-    //-->GEOCENTRICRA is Modulous 24 and rolls-over once per year. However, Summer is defined as when Geocentricra === 6
+-    //No need to interpolate, we know that for supper the value of geocentricra is 6, the definition of summer.
+-    // doInterpolation(v, GEOCENTRICRA, "07 GEOCENTRICRA ", v.ptrC, GEOCENTRICRA_MODULO24);
+-    switch (Season) { //Switch statement of just 4 possibilities is certainly less costly than sprintf.
+-        case SPRING:
+-            v.workbuf[GEOCENTRICRA] = "0";
+-            break;
+-        case SUMMER:
+-            v.workbuf[GEOCENTRICRA] = "6";
+-            break;
+-        case AUTUMN:
+-            v.workbuf[GEOCENTRICRA] = "12";
+-            break;
+-        case WINTER:
+-            v.workbuf[GEOCENTRICRA] = "18";
+-            break;
+-        default:
+-            cout << "EXITING due to SPECIFICATION ERROR: Performing season processing but Season Processing incorrectly specified as "  << Season << "!!" << endl;
+-            exit (-10);
+-    }
+-    if (v.db2__) cout << "07 GEOCENTRICRA " << v.workbuf[GEOCENTRICRA] << endl;
+-    v.buf += v.workbuf[GEOCENTRICRA];    //2022-06-13T08:40:54 added this necessary instruction
+-    v.buf += ", ";
+-    //GEOCENTRICDEC
+-    doInterpolation(v, GEOCENTRICDEC, "08 GEOCENTRICDEC ", v.ptrC, 0);
+-    //GEOCENTRICDIS
+-    doInterpolation(v, GEOCENTRICDIS, "09 GEOCENTRICDIS ", v.ptrC, 0);
+-    //JDUTC
+-    doInterpolation(v, JDUTC, "10 JDUTC ", v.ptrC, 0);
+-    //JDLOCAL ONLY ONE VALUE HERE BECAUSE we are looking for just one value of jdlocal, the jdlocal time when ERA === 0
+-    v.workbuf[JDLOCAL] = to_string_with_precision(v.resultJDLOCAL, v.DESIRED_MAX_PRECISION);    //Convert double to c++ string of \
+-    15 digit precision
+-    if (v.db2__) cout << "11 JDLOCAL " << v.workbuf[JDLOCAL] << endl;
+-    v.buf += v.workbuf[JDLOCAL]; //Concatenate onto buf
+-    v.buf += ", ";
+-    //SITEID ONLY ONE VALUE HERE BECAUSE we process only one value of siteid.
+-    v.workbuf[SITEID] = string(v.ptrWhatThisSiteIdIs); //Converts c-string, as found in “v.ptrWhatThisSiteIdIs”, to a c++ string
+-    if (v.db2__) cout << "12 SITEID " << v.workbuf[SITEID] << endl;
+-    v.buf += v.workbuf[SITEID];        // Concatenate siteid onto buf
+-    v.buf += ", ";                     // Concatenate separator onto buf
+-    //-->ERA is a Modulous 360 parameter  ONLY ONE VALUE HERE BECAUSE we are looking for predefined value ERA = 0.
+-    doInterpolation(v, ERA_, "13 ERA ", v.ptrC, ERA_MODULO360);
+-    //-->LAST is a Modulous 24 parameter
+-    doInterpolation(v, LAST_, "14 LAST ", v.ptrC, LAST_MODULO24);
+-    //-->GAST is a Modulous 24 parameter;
+-    doInterpolation(v, GAST_, "15 GAST ", v.ptrC, GAST_MODULO24);
+-    //        if(v.eventParameter >= GAST_MODULO24) v.eventParameter -= GAST_MODULO24; //IF necessary, BackOut the modulous
+-    //        v.workbuf[GAST] = to_string(v.eventParameter);  //Convert double to c++ string of 15 digit precision
+-    //        if (v.db2__) cout << "15 GAST " << v.workbuf[GAST] << endl;
+-    //        v.buf += v.workbuf[GAST]; //Concatenate GAST onto buf
+-    //        v.buf += ", ";
+-    //VCELX
+-    doInterpolation(v, VCELX, "16 VCELX ", v.ptrC, 0);
+-    //VCELY
+-    doInterpolation(v, VCELY, "17 VCELY ", v.ptrC, 0);
+-    //VCELZ
+-    doInterpolation(v, VCELZ, "18 VCELZ ", v.ptrEndCap, 0);  //VCELZ gets the special SQL command-terminating ", 'GAST0');"
+-    //  v.iI = v.intermediateConnectionString.c_str();  // Then convert the c++ string object into a c-string array of characters, \
+-    which is what the PostgreSQL prefers because the PostgreSQL libpq routines are written in standard C and know nothing about \
+-    c++ object-oriented coding techniques.
+-    v.iI = v.buf.c_str(); //Covert the c++ string to ordinary c-string because PostgreSQL database DOES NOT understand c++ strings!
+-    if (v.db2__) {
+-        cout <<   "v.numberOfEntries: " << v.numberOfEntries  << "\nv.numberOf_BS_Entries: " << v.numberOf_BS_Entries << endl;
+-        cout << "The size of v.buf is " << v.buf.size() << " characters " << endl;
+-    }
+-    v.charactersWrittenToFile += fwrite(v.iI, 1, strlen(v.iI), v.fp); // Output into the output file the \
+-    first logical record, the INSERT INTO statement.
+-    if (v.executeTheSQL) doExecSQL(v, v.iI, PGRES_COMMAND_OK, true);
+-    freeCallocdMemory(v);
+-}
++
++
+ int doGAST(Constants &v, void *ptr_to_void) {
+-    //NOTE: LAST and GAST share the same 1D and 2D templates because they are so similar.
+-    v.Constants::some2Darray = (char **)v.ptr2DTemplateGAST0;  //Need to create a unique v.sunTemplateGAST0 rather than “borrow” \
+-    v.sunTemplateERA0
++//NOTE: LAST and GAST share the same 1D and 2D templates because they are so similar.
++    v.some2Darray = v.ptr2DTemplateGAST0[0];  //Need to create a unique v.sunTemplateGAST0 rather than “borrow” v.sunTemplateERA0
+     v.some2DArraySize = sizeof(v.ptr2DTemplateGAST0[0]);
+     v.numberOf2Dentries = (v.some2DArraySize>>1);
+     v.some1Darray = v.ptr1DTemplateGAST0;
+     v.some1DArraySize = (int)strlen(v.ptr1DTemplateGAST0);
+     v.ptrWhatThisEventIs = "GAST";
+-    v.ptrWhatThisEventDefinitionIs = "0"; //This means we're looking for when GAST == 0
++    v.ptrWhatThisEventDefinitionIs = "0";
+     v.ptrWhatThisFieldIs = "gast";
+     v.ptrEndCap = ", 'GAST0');";  //2022-03-13T16:40:29: Added the ', ', the ')', the festooning of GAST0 with ‘'’, and the ';'
+     if(v.db2__)  reviewDo(v, "doGAST");
+@@ -214,17 +41,15 @@ int doGAST(Constants &v, void *ptr_to_void) {
+ } //End of doGAST
+ int processGAST(Constants &v,void *ptr_to_void) {
+     v.ptr_eP = &v.myEvents[GAST]; //
+-    v.eventParameter = v.ptr_eP->modulous; //This becomes the aspirational value, or independent parameter, for our \
+-    Chebyshev Polynomial Interpolation activity.
+-    if (!v.ptrArrayDependent) v.ptrArrayDependent = (myParameters *)calloc(sizeof(myParameters), v.numberOfRows); //jdlocal will \
+-    be in ArrayDependent
+-    if (!v.ptrArrayIndependent) v.ptrArrayIndependent = (myParameters *)calloc(sizeof(myParameters), v.numberOfRows); // Either \
+-    era, gast, last, zenithdistance [sunrise, sunset, noon], or geocentricra [summer, fall, winter, spring] will be in \
+-    arrayIndependent because we want to find the specific local time, jdlocal, when era=360, gast = 24 hours, last = 24 hours, \
+-    zenithdistance=90.5833… [sunrise or sunset], zenithdistance is a minimum value [noon], geocentricra is 6 [summer], \
+-    12 [fall/autumn], 18 [winter], or 0 [spring]. To accomplish this we set the independent variable (GAST) to zero and then \
+-    provide doChebyshev, for performing Chebyshev Polynomial Interpolation, with the jdlocal values surrounding the location where \
+-    what we believe the sought-after gast value lies.
++    v.eventParameter = v.ptr_eP->modulous; //This becomes the aspirational value, or independent parameter, for our Chebyshev Polynomial Interpolation activity.
++//    v.ptrArrayDependent = (myParameters *)calloc(sizeof(myParameters), v.numberOfRows); //jdlocal will be in ArrayDependent
++//    v.ptrArrayIndependent = (myParameters *)calloc(sizeof(myParameters), v.numberOfRows); // Either era, gast, last, zenithdistance \
++    [sunrise, sunset, noon], or geocentricra [summer, fall, winter, spring] will be in arrayIndependent because we want to find the \
++    specific local time, jdlocal, when era=360, gast = 24 hours, last = 24 hours, zenithdistance=90.5833… [sunrise or sunset], \
++    zenithdistance is a minimum value [noon], geocentricra is 6 [summer], 12 [fall/autumn], 18 [winter], or 0 [spring]. \
++    To accomplish this we set the independent variable (GAST) to zero and then provide doChebyshev, for performing \
++    Chebyshev Polynomial Interpolation, with the jdlocal values surrounding the location where what we believe the sought-after \
++    gast value lies.
+     for (v.i=0; v.i<v.numberOfRows; v.i++) { // +1
+         if ( v.i > 0 && (fabs((v.allFetchedData  + v.i)->gast < fabs((v.allFetchedData + v.i -1)->gast)) ) ) { //If current \
+             value is less than previous independent value, then add modulus to the current value, thus satisfying \
+@@ -247,10 +72,11 @@ int processGAST(Constants &v,void *ptr_to_void) {
+     //                          |            |                  |                       |                  |
+     //                          V            V                  V                       V                  V
+     v.resultJDLOCAL=doChebyshev(v,    v.numberOfRows, &v.eventParameter, v.ptrArrayIndependent, v.ptrArrayDependent);
+-    reallocateArrays(v);                                                                                //Added 2022-06-16T08:47:07
++    
++    //At this point v.resultingDependentVariable points to the local time, in julian day format. This time will become the the \
++    independent variable;
+     v.ptrIndependentVariable = &v.resultingDependentVariable; //From now on, jdlocal becomes the independent variable
+-    //
+-    if(!v.ptrAllResultingDependentVaraiables) v.ptrAllResultingDependentVaraiables=(namesOfColumns *)calloc(sizeof(namesOfColumns), 1);
++    v.ptrAllResultingDependentVaraiables = (namesOfColumns *)calloc(sizeof(namesOfColumns), 1);
+     (v.ptrAllResultingDependentVaraiables + JDLOCAL)->jdlocal = v.resultJDLOCAL;
+     (v.ptrAllResultingDependentVaraiables + GAST)->gast = v.eventParameter;   //This Becomes the aspirational value as presented via \
+     the -e command line parameter
+@@ -273,6 +99,18 @@ int processGAST(Constants &v,void *ptr_to_void) {
+     a comma.
+     v.buf += "', ";
+     (v.ptrAllResultingDependentVaraiables + SITEID)->siteid = (v.allFetchedData + SITEID)->siteid;  //SITEID doesn't change
++    // *************************    Interchange values in ptrArrayIndependent and ptrArrayDependent.   *****************************
++    v.ptrTemp = v.ptrArrayIndependent;  //Temporarily save the pointer to the single column array currently used to store the \
++    independent variable (ERA). Subsequently we will reuse this array to store a passel of dependent variables.
++    v.ptrArrayIndependent = v.ptrArrayDependent; //The array of what was dependent parameters (i.e., jdlocal values) will, from  \
++    now on, assume to be the array of independent parametrs (i.e., array of jdlocal values).
++    v.ptrArrayDependent = v.ptrTemp; //Let the ptrArrayDependent point to what was once the array of independent parameters \
++    (i.e, array of era values).
++    // *************************    Interchange values in ptrArrayIndependent and ptrArrayDependent.   *****************************
++    
++    //Move all the returned topocentricra data, scattered around multicolumn array allFetchedData into the single column array, \
++    as demanded by the gsl Chebyschev Polynomial Interpolation Routine, pointed to by ptrArrayDependent. This single column array, \
++    calloced above, will be used over-and-over to contain the many various dependent variables.
+     
+     
+     //-->TOPOCENTRICRA is Modulous 24 and rolls-over once per year
+@@ -331,14 +169,17 @@ int processGAST(Constants &v,void *ptr_to_void) {
+     v.charactersWrittenToFile += fwrite(v.iI, 1, strlen(v.iI), v.fp); // Output into the output file the \
+     first logical record, the INSERT INTO statement.
+     if (v.executeTheSQL) doExecSQL(v, v.iI, PGRES_COMMAND_OK, true);
+-    freeCallocdMemory(v);
++    if (v.ptrArrayIndependent) free(v.ptrArrayIndependent);
++    v.ptrArrayIndependent = nullptr;
++    if (v.ptrArrayDependent) free(v.ptrArrayDependent);
++    v.ptrArrayDependent = nullptr;
+     return 0;
+ }  //End of processGAST
+ int doLAST(Constants &v, void *ptr_to_void) {
+     //NOTE: LAST and GAST share the same 1D and 2D templates because they are so similar.
+-    v.Constants::some2Darray = (char **)v.ptr2DTemplateGAST0;  //Need to create a unique v.sunTemplateGAST0 rather than “borrow” v.sunTemplateERA0
++    v.some2Darray = v.ptr2DTemplateGAST0[0];  //Need to create a unique v.sunTemplateGAST0 rather than “borrow” v.sunTemplateERA0
+     v.some2DArraySize = sizeof(v.ptr2DTemplateGAST0[0]);
+-    v.numberOf2Dentries = (v.some2DArraySize>>1);  //Here we're interested in just the number of rows; number of columns is 2.
++    v.numberOf2Dentries = (v.some2DArraySize>>1);
+     v.some1Darray = v.ptr1DTemplateGAST0;
+     v.some1DArraySize = (int)strlen(v.ptr1DTemplateGAST0);
+     v.ptrWhatThisEventIs = "LAST";
+@@ -351,8 +192,8 @@ int doLAST(Constants &v, void *ptr_to_void) {
+ int processLAST(Constants &v,void *ptr_to_void) {
+     v.ptr_eP = &v.myEvents[LAST]; //
+     v.eventParameter = v.ptr_eP->modulous;
+-    //    v.ptrArrayDependent = (myParameters *)calloc(sizeof(myParameters), v.numberOfRows); //jdlocal will be in ArrayDependent
+-    //    v.ptrArrayIndependent = (myParameters *)calloc(sizeof(myParameters), v.numberOfRows); // Either era, gast, last, zenithdistance \
++//    v.ptrArrayDependent = (myParameters *)calloc(sizeof(myParameters), v.numberOfRows); //jdlocal will be in ArrayDependent
++//    v.ptrArrayIndependent = (myParameters *)calloc(sizeof(myParameters), v.numberOfRows); // Either era, gast, last, zenithdistance \
+     [sunrise, sunset, noon], or geocentricra [summer, fall, winter, spring] will be in arrayIndepented because we want to find the \
+     specific time, jdlocal, when era=360, gast = 24 hours, last = 24 hours, zenithdistance=90.5833… [sunrise or sunset], \
+     zenithdistance is a minimum value [noon], geocentricra is 6 [summer], 12 [fall/autumn], 18 [winter], or 0 [spring].  \
+@@ -381,7 +222,9 @@ int processLAST(Constants &v,void *ptr_to_void) {
+     //                          |            |                  |                       |                  |
+     //                          V            V                  V                       V                  V
+     v.resultJDLOCAL=doChebyshev(v,    v.numberOfRows, &v.eventParameter, v.ptrArrayIndependent, v.ptrArrayDependent);
+-    reallocateArrays(v); //Added 2022-06-16T09:03:30
++    
++    //At this point v.resultingDependentVariable points to the local time, in julian day format. This time will become the the \
++    independent variable;
+     v.ptrIndependentVariable = &v.resultingDependentVariable; //From now on, make jdlocal the independent variable
+     v.ptrAllResultingDependentVaraiables = (namesOfColumns *)calloc(sizeof(namesOfColumns), 1);
+     (v.ptrAllResultingDependentVaraiables + JDLOCAL)->jdlocal = v.resultJDLOCAL;
+@@ -406,6 +249,17 @@ int processLAST(Constants &v,void *ptr_to_void) {
+     a comma.
+     v.buf += "', ";
+     (v.ptrAllResultingDependentVaraiables + SITEID)->siteid = (v.allFetchedData + SITEID)->siteid;  //SITEID doesn't change
++    // *************************    Interchange values in ptrArrayIndependent and ptrArrayDependent.   ********************************
++    v.ptrTemp = v.ptrArrayIndependent;  //Temporarily save the pointer to the single column array currently used to store the \
++    independent variable (ERA). Subsequently we will reuse this array to store a passel of dependent variables.
++    v.ptrArrayIndependent = v.ptrArrayDependent; //The array of what was dependent parameters (i.e., jdlocal values) will, from  \
++    now on, assume to be the array of independent parametrs (i.e., array of jdlocal values).
++    v.ptrArrayDependent = v.ptrTemp; //Let the ptrArrayDependent point to what was once the array of independent parameters \
++    (i.e, array of era values).
++    // *************************    Interchange values in ptrArrayIndependent and ptrArrayDependent.   ********************************
++    //Move all the returned topocentricra data, scattered around multicolumn array allFetchedData into the single column array, \
++    as demanded by the gsl Chebyschev Polynomial Interpolation Routine, pointed to by ptrArrayDependent. This single column array, \
++    calloced above, will be used over-and-over to contain the many various dependent variables.
+     
+     //-->TOPOCENTRICRA is Modulous 24 and rolls-over once per year
+     doInterpolation(v, TOPOCENTRICRA, "02 TOPOCENTRICRA ", v.ptrC, TOPOCENTRICRA_MODULO24);
+@@ -463,12 +317,16 @@ int processLAST(Constants &v,void *ptr_to_void) {
+     v.charactersWrittenToFile += fwrite(v.iI, 1, strlen(v.iI), v.fp); // Output into the output file the \
+     first logical record, the INSERT INTO statement.
+     if (v.executeTheSQL) doExecSQL(v, v.iI, PGRES_COMMAND_OK, true);
+-    freeCallocdMemory(v);
++    if (v.ptrArrayIndependent) free(v.ptrArrayIndependent);
++    v.ptrArrayIndependent = nullptr;
++    if (v.ptrArrayDependent) free(v.ptrArrayDependent);
++    v.ptrArrayDependent = nullptr;
++    
+     return 0;
+ }  //End of processLAST
+ 
+ int doSR(Constants &v, void* myb) {
+-    v.some2Darray = (char **)v.sunRiseArray; //sunRiseArray is in Constants.hpp
++    v.some2Darray = v.sunRiseArray[0]; //sunRiseArray is in Constants.hpp
+     v.some1Darray = (char *)v.ptrSQLTemplateSR;
+     v.some2DArraySize = sizeof(v.sunRiseArray[0]); //should be 10 for 10 rows
+     v.numberOf2Dentries = (v.some2DArraySize>>1);
+@@ -504,31 +362,42 @@ int processSR(Constants &v, void *ptr_to_void) { // sunrise === zenithdistance =
+     v.ptr_eP->modulous = 0; //zenithdistance has no modulus
+     v.ptr_eP = &v.myEvents[SUNRISE];
+     v.eventParameter = atof(ZENITHDISTANCE_SR_OR_SS);
+-    //Callocing of two arrays in now done in goExecuteSomeSQL
+-    //  v.ptrArrayDependent = (myParameters *)calloc(sizeof(myParameters), v.numberOfRows); //jdlocal will be in ArrayDependent
+-    //  v.ptrArrayIndependent = (myParameters *)calloc(sizeof(myParameters), v.numberOfRows); // Either era, gast, last, zenithdistance \
++
++
++//Callocing of two arrays in now done in goExecuteSomeSQL
++//    v.ptrArrayDependent = (myParameters *)calloc(sizeof(myParameters), v.numberOfRows); //jdlocal will be in ArrayDependent
++//    v.ptrArrayIndependent = (myParameters *)calloc(sizeof(myParameters), v.numberOfRows); // Either era, gast, last, zenithdistance \
+     [sunrise, sunset, noon], or geocentricra [summer, fall, winter, spring] will be in arrayIndepented because we want to find the \
+     specific time, jdlocal, when era=360, gast = 24 hours, last = 24 hours, zenithdistance=90.5833… [sunrise or sunset], \
+     zenithdistance is a minimum value [noon], geocentricra is 6 [summer], 12 [fall/autumn], 18 [winter], or 0 [spring].  \
+     To accomplish this we set the independent variable (zenithdistance) to 90.5833 and then provide doChebyshev, for performing \
+     Chebyshev Polynomial Interpolation, with the jdlocal values surrounding the location where what we believe the sought-after \
+     gast value lies.
+-    //NOTE that zenithdistance decreases as we approach time of sunrise (zenithdistance === 90.5833) and keeps decreasing until we \
+-    reach noon at which point zenithdistance begins to increase again. Then, half-a-day-later (~ 12 hours), zenith distance begins \
+-    to decrease again. For sunrise and sunset processing, we will rely upon the SQL SELECT statement, that collected the data, that \
+-    this function will have the data sorted in a manner satisfactory to the gsl routines' requirements that data be sorted in a \
+-    monotonically increasing manner.
+-    /*   The following code is commented out because it came from the legacy processERA function and is not germaine to processSR */
+-    for (v.i=0; v.i < v.numberOfRows; v.i++) { // +1
+-        (v.ptrArrayIndependent + v.i)->dbl_value   = (v.allFetchedData + v.i)->zenithdistance;
+-        (v.ptrArrayIndependent + v.i)->index = v.i;
+-        (v.ptrArrayDependent + v.i)->dbl_value     = (v.allFetchedData + v.i)->jdlocal;
+-        (v.ptrArrayDependent + v.i)->index = v.i;
+-    }     // -1 End of for loop
+-    
+-    interchange ( v.ptrArrayIndependent, v.numberOfRows); //Interchange the independent variables effecting reversing the order
+-    interchange ( v.ptrArrayDependent, v.numberOfRows);     //Interchange the dependent variables effecting reversing the order
+-    //---
++//     NOTE that zenithdistance decreases as we approach time of sunrise (zenithdistance === 90.5833) and keeps decreasing until we reach noon
++//     at which point zenithdistance begins to increase again. Then, half-a-day-later (~ 12 hours),  zenith distance begins to decrease again.
++//     For sunrise and sunset processing, we will rely upon the SQL SELECT statement, that collected the data, that this function will have the data
++//     sorted in a manner satisfactory to the gsl routines' requirements that data be sorted in a monotonically increasing manner.
++/*   The following code is commented out because it came from the legacy processERA function and is not germaine to processSR */
++     for (v.i=0; v.i < v.numberOfRows; v.i++) { // +1
++/*
++         if ( v.i > 0 && (fabs((v.allFetchedData  + v.i)->zenithdistance < fabs((v.allFetchedData + v.i -1)->zenithdistance)) ) ) { //If current \
++     value is less than previous independent value, then add modulus to the current value, thus satisfying \
++     gsl interpolation routine's requirement that arrays be monotonically increasing.
++             (v.allFetchedData + v.i)->zenithdistance  += (double)v.ptr_eP->modulous; //Should NEVER NEED TO DO THIS FOR SR OR SS \
++         events; in fact (double)v.ptr_eP->modulous should be set to zero for SR or SS
++         } else {
++             ;
++         }  // end of if/else
++ */
++         (v.ptrArrayIndependent + v.i)->dbl_value   = (v.allFetchedData + v.i)->zenithdistance;
++         (v.ptrArrayIndependent + v.i)->index = v.i;
++         (v.ptrArrayDependent + v.i)->dbl_value     = (v.allFetchedData + v.i)->jdlocal;
++         (v.ptrArrayDependent + v.i)->index = v.i;
++     }     // -1 End of for loop
++
++    interchange ( v.ptrArrayIndependent, v.numberOfRows); //Interchange the independent variables effecting reversing the  order
++    interchange ( v.ptrArrayDependent, v.numberOfRows);   //Interchange the dependent variables   effecting reversing the  order
++//---
+     //
+     //
+     //        points to array of associated dependent variables -------------------------------------------+
+@@ -539,17 +408,34 @@ int processSR(Constants &v, void *ptr_to_void) { // sunrise === zenithdistance =
+     //                          |            |                  |                       |                  |
+     //                          V            V                  V                       V                  V
+     v.resultJDLOCAL=doChebyshev(v,    v.numberOfRows, &v.eventParameter, v.ptrArrayIndependent, v.ptrArrayDependent);
+-    reallocateArrays(v, true);
++//----
++    //Free this because we won't be needing to point to an array of zenithdistance values because there is only ONE zenithdistance \
++    value we will use and that's what's in v.eventParameter and v.resultJDLOCAL is the local time that we achieved the desired \
++    value of ZENITHDISTANCE_SR_OR_SS.
++    free(v.ptrArrayIndependent); //Free array of independent variables, containing a 1D array of no longer needed zenithdistances
++    
++    interchange (v.ptrArrayDependent, v.numberOfRows); //Interchange the dependent variables (jdlocal) back to original order \
++    because we've done this interchange operation twice. jdlocal becomes the independent variable for all subsequent calls to \
++    by doInterpolation to doChebyshev. doInterpolation’s job is to put the dependent variables into the dependent variable array.
++    
++    v.ptrArrayIndependent = v.ptrArrayDependent; //ReAssign v.ptrArrayIndependent to point to the array of jdlocal times which \
++    WAS in the array of Dependent Varaibles (v.ptrArrayDependent)
++    //At this point v.resultingDependentVariable points to the local time, in julian day format. This time will become the the \
++    independent variable;
++    v.ptrArrayDependent = (myParameters *)calloc(sizeof(myParameters), v.numberOfRows); //Now reAllocate a new \
++    Array of Dependent Variables to the variable v.ptrArrayDependent. This array will be used by doInterpolation.
++
+     v.ptrIndependentVariable = &v.resultingDependentVariable; //From now on, make jdlocal the independent variable
++    
+     v.ptrAllResultingDependentVaraiables = (namesOfColumns *)calloc(sizeof(namesOfColumns), 1);
+     (v.ptrAllResultingDependentVaraiables + JDLOCAL)->jdlocal = v.resultJDLOCAL;
+     (v.ptrAllResultingDependentVaraiables + ZENITHDISTANCE)->zenithdistance = v.eventParameter;   //ZENITHDISTANCE Becomes the \
+     aspirational value as presented via the -e command line parameter. With zenithdistance there are not sudden downward jumps \
+     toward zeron when we've reached the “modulo limit”
+-    //----
++//----
+     //At this point v.resultingDependentVariable points to the local time, in julian day format. This time will become the the \
+     independent variable;
+-    
++
+     v.buf.reserve(1500); //Without this the capacity of the v.buf is 22 characters.
+     v.buf.clear(); //Make sure this c++ buffer is clean
+     if(v.db2__) {
+@@ -567,7 +453,20 @@ int processSR(Constants &v, void *ptr_to_void) { // sunrise === zenithdistance =
+     a comma.
+     v.buf += "', ";
+     (v.ptrAllResultingDependentVaraiables + SITEID)->siteid = (v.allFetchedData + SITEID)->siteid;  //SITEID doesn't change
++
++/* Take the times, in revers order, from array pointed to by v.ptrArrayDependent, and put these values into array pointed to by \
++    v.ptrArrayIndependent. We end up with times in v.ptrArrayIndependent in ASCENDING order., Which is what the gsl routimes like \
++    to see.
++    for (v.i=0, v.j=v.numberOfRows-1; v.i < v.numberOfRows; v.i++, v.j--) {
++        v.ptrArrayIndependent[v.i] = v.ptrArrayDependent[v.j]; 
++    }
++*/
++    //Move all the returned topocentricra data, scattered around multicolumn array allFetchedData into the single column array, \
++    as demanded by the gsl Chebyschev Polynomial Interpolation Routine, pointed to by ptrArrayDependent. This single column array, \
++    calloced above, will be used over-and-over to contain the many various dependent variables.
+     
++  
++ 
+     //-->TOPOCENTRICRA is Modulous 24 and rolls-over once per year
+     doInterpolation(v, TOPOCENTRICRA, "02 TOPOCENTRICRA ", v.ptrC, TOPOCENTRICRA_MODULO24);
+     //TOPOCENTRICDEC ranges between +23.4… degrees and -23.4… degrees and becomes zero at Vernal Equinox (Spring)
+@@ -592,8 +491,8 @@ int processSR(Constants &v, void *ptr_to_void) { // sunrise === zenithdistance =
+     //JDUTC
+     doInterpolation(v, JDUTC, "10 JDUTC ", v.ptrC, 0);
+     //JDLOCAL ONLY ONE VALUE HERE BECAUSE we are looking for just one value of jdlocal, the jdlocal time when ERA === 0
+-    v.workbuf[JDLOCAL] = to_string_with_precision(v.resultJDLOCAL, v.DESIRED_MAX_PRECISION); //Convert type double to c++ string \
+-    having precision as specified in v.DESIRED_MAX_PRECISION [usually 15 digits]
++    v.workbuf[JDLOCAL] = to_string_with_precision(v.resultJDLOCAL, v.DESIRED_MAX_PRECISION);    //Convert double to c++ string of \
++    15 digit precision
+     if (v.db2__) cout << "11 JDLOCAL " << v.workbuf[JDLOCAL] << endl;
+     v.buf += v.workbuf[JDLOCAL]; //Concatenate onto buf
+     v.buf += ", ";
+@@ -630,13 +529,18 @@ int processSR(Constants &v, void *ptr_to_void) { // sunrise === zenithdistance =
+     v.charactersWrittenToFile += fwrite(v.iI, 1, strlen(v.iI), v.fp); // Output into the output file the \
+     first logical record, the INSERT INTO statement.
+     if (v.executeTheSQL) doExecSQL(v, v.iI, PGRES_COMMAND_OK, true);
+-    freeCallocdMemory(v);
++    if (v.ptrArrayIndependent) free(v.ptrArrayIndependent);   //This was acquired in function goExecuteSomeSQL
++    v.ptrArrayIndependent = nullptr;
++    if (v.ptrArrayDependent) free(v.ptrArrayDependent); //This was acquired in function goExecuteSomeSQL
++    v.ptrArrayDependent = nullptr;
++    if (v.ptrAllResultingDependentVaraiables) free(v.ptrAllResultingDependentVaraiables); //This memory was acquired in this function
++    v.ptrAllResultingDependentVaraiables = nullptr;
+     return 0;
+     
+ } //End of processSR
+ 
+ int doERA(Constants &v, void *myb) {
+-    v.Constants::some2Darray = (char **)v.sunTemplateERA0;
++    v.some2Darray = v.sunTemplateERA0[0];
+     v.some1Darray = v.ptrSQLTemplateERA0;
+     v.some2DArraySize = sizeof(v.ptr2DTemplateGAST0[0]);
+     v.numberOf2Dentries = (v.some2DArraySize>>1);
+@@ -653,8 +557,8 @@ int processERA(Constants &v, void *ptr_to_void) { // +0
+     v.ptr_eP = &v.myEvents[ERA];
+     v.eventParameter = v.ptr_eP->modulous;
+     //Callocing in now done in goExecuteSomeSQL.cpp
+-    //   v.ptrArrayDependent = (myParameters *)calloc(sizeof(myParameters), v.numberOfRows); //jdlocal will be in ArrayDependent
+-    //   v.ptrArrayIndependent = (myParameters *)calloc(sizeof(myParameters), v.numberOfRows); // Either era, gast, last, zenithdistance \
++ //   v.ptrArrayDependent = (myParameters *)calloc(sizeof(myParameters), v.numberOfRows); //jdlocal will be in ArrayDependent
++ //   v.ptrArrayIndependent = (myParameters *)calloc(sizeof(myParameters), v.numberOfRows); // Either era, gast, last, zenithdistance \
+     [sunrise, sunset, noon], or geocentricra [summer, fall, winter, spring] will be in arrayIndepented because we want to find the \
+     specific time, jdlocal, when era=360, gast = 24 hours, last = 24 hours, zenithdistance=90.5833… [sunrise or sunset], \
+     zenithdistance is a minimum value [noon], geocentricra is 6 [summer], 12 [fall/autumn], 18 [winter], or 0 [spring].  \
+@@ -683,7 +587,10 @@ int processERA(Constants &v, void *ptr_to_void) { // +0
+     //                          |            |                  |                       |                  |
+     //                          V            V                  V                       V                  V
+     v.resultJDLOCAL=doChebyshev(v,    v.numberOfRows, &v.eventParameter, v.ptrArrayIndependent, v.ptrArrayDependent);
+-    reallocateArrays(v);
++    
++    //At this point v.resultingDependentVariable points to the local time, in julian day format. This time will become the the \
++    independent variable;
++    v.ptrIndependentVariable = &v.resultingDependentVariable; //From now on, make jdlocal the independent variable
+     v.ptrAllResultingDependentVaraiables = (namesOfColumns *)calloc(sizeof(namesOfColumns), 1);
+     (v.ptrAllResultingDependentVaraiables + JDLOCAL)->jdlocal = v.resultJDLOCAL;
+     (v.ptrAllResultingDependentVaraiables + ERA)->era = v.eventParameter;   //This Becomes the aspirational value as presented via \
+@@ -695,7 +602,7 @@ int processERA(Constants &v, void *ptr_to_void) { // +0
+     if(v.db2__) {
+         cout << "The max size of v.buf is: " << v.buf.max_size() << ",\nthe capacity of v.buf is: " << v.buf.capacity() << endl;
+         cout << "After doing v.buf.reserve(1500), the capacity of v.buf is now: " << v.buf.max_size() << \
+-        " characters (i.e. 2^64), the capacity of v.buf is: " << v.buf.capacity() << " characters." << endl;
++    " characters (i.e. 2^64), the capacity of v.buf is: " << v.buf.capacity() << " characters." << endl;
+     } //
+     v.buf += v.insertIntoStart; //Initialize v.buf with the “INSERT INTO … blah, blah, blah” SQL ”INSERT INTO“  preliminaries
+     v.ptrToGregorian = julianToGregorian(&v.resultJDLOCAL, 0) ; //julianToGregorian is a recently (2020-12-02) added dylib. Perhaps \
+@@ -707,6 +614,19 @@ int processERA(Constants &v, void *ptr_to_void) { // +0
+     a comma.
+     v.buf += "', ";
+     (v.ptrAllResultingDependentVaraiables + SITEID)->siteid = (v.allFetchedData + SITEID)->siteid;  //SITEID doesn't change
++    // *************************    Interchange values in ptrArrayIndependent and ptrArrayDependent.   ********************************
++    v.ptrTemp = v.ptrArrayIndependent;  //Temporarily save the pointer to the single column array currently used to store the \
++    independent variable (ERA). Subsequently we will reuse this array to store a passel of dependent variables.
++    v.ptrArrayIndependent = v.ptrArrayDependent; //The array of what was dependent parameters (i.e., jdlocal values) will, from  \
++    now on, assume to be the array of independent parametrs (i.e., array of jdlocal values).
++    v.ptrArrayDependent = v.ptrTemp; //Let the ptrArrayDependent point to what was once the array of independent parameters \
++    (i.e, array of era values).
++    // *************************    Interchange values in ptrArrayIndependent and ptrArrayDependent.   ********************************
++    
++    //Move all the returned topocentricra data, scattered around multicolumn array allFetchedData into the single column array, \
++    as demanded by the gsl Chebyschev Polynomial Interpolation Routine, pointed to by ptrArrayDependent. This single column array, \
++    calloced above, will be used over-and-over to contain the many various dependent variables.
++    
+     
+     //-->TOPOCENTRICRA is Modulous 24 and rolls-over once per year
+     doInterpolation(v, TOPOCENTRICRA, "02 TOPOCENTRICRA ", v.ptrC, TOPOCENTRICRA_MODULO24);
+@@ -764,142 +684,101 @@ int processERA(Constants &v, void *ptr_to_void) { // +0
+     v.charactersWrittenToFile += fwrite(v.iI, 1, strlen(v.iI), v.fp); // Output into the output file the \
+     first logical record, the INSERT INTO statement.
+     if (v.executeTheSQL) doExecSQL(v, v.iI, PGRES_COMMAND_OK, true);
+-    freeCallocdMemory(v);
++    if (v.ptrArrayIndependent) free(v.ptrArrayIndependent); //This memory was acquired by funciton goExecuteSomeSQL
++    v.ptrArrayIndependent = nullptr;
++    if (v.ptrArrayDependent) free(v.ptrArrayDependent); //This memory was acquired by funciton goExecuteSomeSQL
++    v.ptrArrayDependent = nullptr;
+     return 0;
+ } // End of processERA
+ int doSpring(Constants &v, void* myb) {
+     ; // Spring is defined when geocentricra = 0 hours or 0º. \
+     Watch out for geocentricra modulo 24 "rollover"
+-    v.some2Darray                  = (char **)v.sunTemplate4Seasons; //NTS: Need to create a unique 2D array for arrival of season processing
++    v.some2Darray                  = v.sunTemplate4SEASONS[0]; //NTS: Need to create a unique 2D array for arrival of season processing
+     v.some1Darray                  = v.sqlTemplate4Seasons;
+     v.some1DArraySize              = (int)strlen(v.sqlTemplate4Seasons);
+-    v.some2DArraySize              = sizeof(v.sunTemplate4Seasons);
++    v.some2DArraySize              = sizeof(v.sunTemplate4SEASONS);
+     v.numberOf2Dentries            = (v.some2DArraySize>>1);
+     v.ptrWhatThisEventIs           = "Spring";
+-    v.ptrWhatThisGeocentricraSeasonIs = "24";  // 360º is 0º for this geocentricRA. geocentricRA is a modulo 360 parameter which \
++    v.ptrWhatThisEventDefinitionIs = "24";  // 360º is 0º for this geocentricRA. geocentricRA is a modulo 360 parameter which \
+     rolls-over once per year.
+     v.ptrWhatThisFieldIs = "geocentricra";
+-    v.ptrEndCap = ", 'Spring');"; //2022-03-14T16:53:27: Added the ', ', the ')', the festooning of Spring with ‘'’, and the ';'
++    v.ptrEndCap = ", 'Spring!');"; //2022-03-14T16:53:27: Added the ', ', the ')', the festooning of Spring! with ‘'’, and the ';'
+     if ( v.db2__) reviewDo(v, "doSpring");
+     return 0;
+ } //End of doSpring
+ 
+ int processSpring(Constants &v, void* myb) {
+-    v.ptr_eP = &v.myEvents[SPRING]; //
+-    v.eventParameter = v.ptr_eP->modulous; //This becomes the aspirational value, or independent parameter, for our \
+-    Chebyshev Polynomial Interpolation activity. Note that through SQL Magic geocentricra has alreading added in the modulous = 24 \
+-    which defines Spring. \
+-    [sunrise, sunset, noon], or geocentricra [summer, fall, winter, spring] will be in arrayIndependent because we want to find the \
+-    specific local time, jdlocal, when era=360, gast = 24 hours, last = 24 hours, zenithdistance=90.5833… [sunrise or sunset], \
+-    zenithdistance is a minimum value [noon], geocentricra is 6 [summer], 12 [fall/autumn], 18 [winter], or 0 [spring]. \
+-    To accomplish this we set the independent variable (GAST) to zero and then provide doChebyshev, for performing \
+-    Chebyshev Polynomial Interpolation, with the jdlocal values surrounding the location where what we believe the sought-after \
+-    gast value lies.
+-    genericSeasonProcessing(v, SPRING);
+     ; // TO BE DEFINED
+     return 0;
+ } //End of processSpring
+ 
+ int doSummer(Constants &v, void* myb) {
+-    // Summer is defined when geocentricra = 6 hours or 90º
+-    
+-    v.some2Darray = (char **)v.sunTemplate4Seasons;   //2022-06-11T10:35:27 NOT DIFFERENCE from v.some_2Darray
+-    v.some1Darray = v.sqlTemplate4Seasons;
+-    v.some1DArraySize = (int)strlen(v.sqlTemplate4Seasons);
+-    v.some2DArraySize = sizeof(v.sunTemplate4Seasons[0]); //2022-06-08T13:30:28
++    ; // Summer is defined when geocentricra = 6 hours or 90º
++    v.some2Darray = v.ptr2DTemplateGAST0[0]; //NTS: Need to create a unique v.sunTemplateSUMMER6 -- where 6 represents the \
++    geocentricRA at summer solstice -- rather than “borrow” v.sunTemplateERA0
++    v.some1Darray = v.ptr1DTemplateGAST0;
++    v.some1DArraySize = (int)strlen(v.ptr1DTemplateGAST0);
++    v.some2DArraySize = sizeof(v.ptr2DTemplateGAST0[0]);
+     v.numberOf2Dentries = (v.some2DArraySize>>1);
+     v.ptrWhatThisEventIs = "Summer";
+-    v.ptrWhatThisGeocentricraSeasonIs = "6";  //When geocentricra = 6, then it's summer.
++    v.ptrWhatThisEventDefinitionIs = "6";  //When geocentricra = 6, then it's summer.
+     v.ptrWhatThisFieldIs = "geocentricra";
+     v.ptrEndCap = ", 'Summer');";
+     if ( v.db2__) reviewDo(v, "doSummer");
+-    return 0;
++    return -v.summer;
+ } //End of doSummer
+ 
+-int processSummer(Constants &v, void* myb) {  //Added 2022-06-04T12:27:31 Made from processGAST
+-    v.ptr_eP = &v.myEvents[SUMMER]; //
+-    v.eventParameter = v.ptr_eP->eventDefinition; //This becomes the aspirational value, or independent parameter, for our \
+-    Chebyshev Polynomial Interpolation activity. \
+-    [sunrise, sunset, noon], or geocentricra [summer, fall, winter, spring] will be in arrayIndependent because we want to find the \
+-    specific local time, jdlocal, when era=360, gast = 24 hours, last = 24 hours, zenithdistance=90.5833… [sunrise or sunset], \
+-    zenithdistance is a minimum value [noon], geocentricra is 6 [summer], 12 [fall/autumn], 18 [winter], or 0 [spring]. \
+-    To accomplish this we set the independent variable (GAST) to zero and then provide doChebyshev, for performing \
+-    Chebyshev Polynomial Interpolation, with the jdlocal values surrounding the location where what we believe the sought-after \
+-    gast value lies.
+-    genericSeasonProcessing(v, SUMMER);
++int processSummer(Constants &v, void* myb) {
+     return 0;
+-    
+ } //End of processSummer
+ 
+ int doAutumn(Constants &v, void* myb) {
+     ; // Autumn (aka fall) is defined when geocentricra = 12 hours or 180º
+-    v.Constants::some2Darray = (char **)v.sunTemplate4Seasons; //NTS: Need to create a unique v.sunTemplateAUTUMN12 -- where 12 represents the \
++    v.some2Darray = v.ptr2DTemplateGAST0[0]; //NTS: Need to create a unique v.sunTemplateAUTUMN12 -- where 12 represents the \
+     geocentricRA at autumn/fall equinox -- rather than “borrow” v.sunTemplateERA0
+-    v.some1Darray = v.sqlTemplate4Seasons;
+-    v.some1DArraySize = (int)strlen(v.sqlTemplate4Seasons);
+-    v.some2DArraySize = sizeof(v.sunTemplate4Seasons[0]);
++    v.some1Darray = v.ptr1DTemplateGAST0;
++    v.some1DArraySize = (int)strlen(v.ptr1DTemplateGAST0);
++    v.some2DArraySize = sizeof(v.ptr2DTemplateGAST0[0]);
+     v.numberOf2Dentries = (v.some2DArraySize>>1);
+     v.ptrWhatThisEventIs = "Autumn";
+     v.ptrWhatThisEventDefinitionIs = "12";
+-    v.ptrWhatThisGeocentricraSeasonIs = "12";
+     v.ptrWhatThisFieldIs = "geocentricra";
+     v.ptrEndCap = ", 'Autumn');";
+     if ( v.db2__) reviewDo(v, "doAutumn");
+     return -v.autumn;
+ } //End of doAutumn
+ int processAutumn(Constants &v, void* myb) {
+-    v.ptr_eP = &v.myEvents[AUTUMN]; //
+-    v.eventParameter = v.ptr_eP->eventDefinition; //This becomes the aspirational value, or independent parameter, for our \
+-    Chebyshev Polynomial Interpolation activity. \
+-    [sunrise, sunset, noon], or geocentricra [summer, fall, winter, spring] will be in arrayIndependent because we want to find the \
+-    specific local time, jdlocal, when era=360, gast = 24 hours, last = 24 hours, zenithdistance=90.5833… [sunrise or sunset], \
+-    zenithdistance is a minimum value [noon], geocentricra is 6 [summer], 12 [fall/autumn], 18 [winter], or 0 [spring]. \
+-    To accomplish this we set the independent variable (GAST) to zero and then provide doChebyshev, for performing \
+-    Chebyshev Polynomial Interpolation, with the jdlocal values surrounding the location where what we believe the sought-after \
+-    gast value lies.
+-    genericSeasonProcessing(v, AUTUMN);
+     return 0;
+ } //End of processAutumn
+ int doWinter(Constants &v, void* myb) {
+     ; // Winter is defined when geocentricra = 18 hours or 270º
+-    v.Constants::some2Darray = (char **)v.sunTemplate4Seasons; //NTS: Need to create a unique v.sunTemplateWINTER18 -- where 18 represents the \
++    v.some2Darray = v.ptr2DTemplateGAST0[0]; //NTS: Need to create a unique v.sunTemplateWINTER18 -- where 18 represents the \
+     geocentricRA at winter solstice -- rather than “borrow” v.sunTemplateERA0
+-    v.some1Darray     = v.sqlTemplate4Seasons;
+-    v.some1DArraySize = (int)strlen(v.sqlTemplate4Seasons);
+-    v.some2DArraySize = sizeof(v.sunTemplate4Seasons);
++    v.some1Darray     = v.ptr1DTemplateGAST0;
++    v.some1DArraySize = (int)strlen(v.ptr1DTemplateGAST0);
++    v.some2DArraySize = sizeof(v.ptr2DTemplateGAST0[0]);
+     v.numberOf2Dentries = (v.some2DArraySize>>1);
+     v.ptrWhatThisEventIs = "Winter";
+     v.ptrWhatThisEventDefinitionIs = "18";
+-    v.ptrWhatThisGeocentricraSeasonIs = "18";
+     v.ptrWhatThisFieldIs = "geocentricra";
+     v.ptrEndCap = ", 'Winter');";
+     if ( v.db2__) reviewDo(v, "doWinter");
+     return -v.winter;
+ } //End of doWinter
+ int processWinter(Constants &v, void* myb) {
+-    v.ptr_eP = &v.myEvents[WINTER]; //
+-    v.eventParameter = v.ptr_eP->eventDefinition; //This becomes the aspirational value, or independent parameter, for our \
+-    Chebyshev Polynomial Interpolation activity. \
+-    [sunrise, sunset, noon], or geocentricra [summer, fall, winter, spring] will be in arrayIndependent because we want to find the \
+-    specific local time, jdlocal, when era=360, gast = 24 hours, last = 24 hours, zenithdistance=90.5833… [sunrise or sunset], \
+-    zenithdistance is a minimum value [noon], geocentricra is 6 [summer], 12 [fall/autumn], 18 [winter], or 0 [spring]. \
+-    To accomplish this we set the independent variable (GAST) to zero and then provide doChebyshev, for performing \
+-    Chebyshev Polynomial Interpolation, with the jdlocal values surrounding the location where what we believe the sought-after \
+-    gast value lies.
+-    genericSeasonProcessing(v, WINTER);
+     return 0;
+ } //End of processWinter
+ 
+ void printFields(Constants &c, int nFields) {
+     for(c.k=0; c.k < nFields; c.k++) {
+-        printf ( "%-20s", PQfname(c.dbc->res, c.k) ); //Every modulo rows print a column header
++        printf ( "%-20s", PQfname(c.dbc->res, c.k) ); //Every modulo rows print a column header 
+     }
+     printf("\n");
+ } //End of printFields
+ 
+ 
+ int doSS(Constants &v, void* myb) {
+-    v.Constants::some2Darray = (char **)v.sunSetArray;
++    v.some2Darray = v.sunSetArray[0];
+     v.some1Darray = (char *)v.ptrSQLTemplateSS;
+     v.some1DArraySize = (int)strlen(v.ptrSQLTemplateSS);
+     v.some2DArraySize = sizeof(v.sunSetArray);
+@@ -913,165 +792,170 @@ int doSS(Constants &v, void* myb) {
+ } //End of doSS
+ 
+ int processSS(Constants &v, void* myb) {
+-    v.ptr_eP->modulous = 0; //zenithdistance, the parameter that determines sunrise or sunset, has no modulus
+-    v.ptr_eP = &v.myEvents[SUNSET];
+-    v.eventParameter = atof(ZENITHDISTANCE_SR_OR_SS);
+-    //The “callocing” of arrays ptrArrayDependent and ptrArrayIndependent, is now done in goExecuteSomeSQL.cpp
+-    //    v.ptrArrayDependent = (myParameters *)calloc(sizeof(myParameters), v.numberOfRows); //jdlocal will be in ArrayDependent
+-    //    v.ptrArrayIndependent = (myParameters *)calloc(sizeof(myParameters), v.numberOfRows); // Either era, gast, last, zenithdistance \
+-    [sunrise, sunset, noon], or geocentricra [summer, fall, winter, spring] will be in arrayIndepented because we want to find the \
+-    specific time, jdlocal, when era=360, gast = 24 hours, last = 24 hours, zenithdistance=90.5833… [sunrise or sunset], \
+-    zenithdistance is a minimum value [noon], geocentricra is 6 [summer], 12 [fall/autumn], 18 [winter], or 0 [spring].  \
+-    To accomplish this we set the independent variable (zenithdistance) to 90.5833 and then provide doChebyshev, for performing \
+-    Chebyshev Polynomial Interpolation, with the jdlocal values surrounding the location where what we believe the sought-after \
+-    gast value lies.
+-    //     NOTE that zenithdistance decreases as we approach time of sunrise (zenithdistance === 90.5833) and keeps decreasing until we reach noon
+-    //     at which point zenithdistance begins to increase again. Then, half-a-day-later (~ 12 hours),  zenith distance begins to decrease again.
+-    //     For sunrise and sunset processing, we will rely upon the SQL SELECT statement, that collected the data, that this function will have the data
+-    
+-    
+-    for (v.i=0; v.i < v.numberOfRows; v.i++) { // +1
+-        if ( v.i > 0 && (fabs((v.allFetchedData  + v.i)->zenithdistance < fabs((v.allFetchedData + v.i -1)->zenithdistance)) ) ) { //If current \
+-            value is less than previous independent value, then add modulus to the current value, thus satisfying \
+-            gsl interpolation routine's requirement that arrays be monotonically increasing.
+-            (v.allFetchedData + v.i)->zenithdistance  += (double)v.ptr_eP->modulous; //Should NEVER NEED TO DO THIS FOR SR OR SS \
+-            events; in fact (double)v.ptr_eP->modulous should be set to zero for SR or SS
+-        } else {
+-            (v.ptrArrayIndependent + v.i)->dbl_value   = (v.allFetchedData + v.i)->zenithdistance;
+-        }  // end of if/else
+-        (v.ptrArrayIndependent + v.i)->index = v.i;
+-        (v.ptrArrayDependent + v.i)->dbl_value     = (v.allFetchedData + v.i)->jdlocal;
+-        (v.ptrArrayDependent + v.i)->index = v.i;
+-    }     // -1 End of for loop
+-    
+-    //
+-    //
+-    //        points to array of associated dependent variables -------------------------------------------+
+-    //        points to array of independent variables ---------------------------------+                  |
+-    //        points to THE desired independent variable -------+                       |                  |
+-    //        points to chebyshev order -----+                  |                       |                  |
+-    //        points to class --+            |                  |                       |                  |
+-    //                          |            |                  |                       |                  |
+-    //                          V            V                  V                       V                  V
+-    v.resultJDLOCAL=doChebyshev(v,    v.numberOfRows, &v.eventParameter, v.ptrArrayIndependent, v.ptrArrayDependent);
+-    free(v.ptrArrayIndependent); //Free array of independent variables, containing a 1D array of nolonger needed zenithdistances
+-    v.ptrArrayIndependent = v.ptrArrayDependent; //ReAssign v.ptrArrayIndependent to point to the array of jdlocal times which \
+-    WAS in the array of Dependent Varaibles (v.ptrArrayDependent)
+-    //At this point v.resultingDependentVariable points to the local time, in julian day format. This time will become the the \
+-    independent variable;
+-    v.ptrArrayDependent = (myParameters *)calloc(sizeof(myParameters), v.numberOfRows); //Now reAllocate a new \
+-    Array of Dependent Variables
+-    //   free(v.ptrArrayIndependent); //Free this because we won't be needing to point to an array of zenithdistance values because \
+-    there is only ONE zenith distance value we will use and that's what's in v.eventParameter and v.resultJDLOCAL is the local time \
+-    that we achieved the desired value of ZENITHDISTANCE_SR_OR_SS.
+-    v.ptrIndependentVariable = &v.resultingDependentVariable; //From now on, make jdlocal the independent variable
+-    
+-    
+-    
+-    v.ptrAllResultingDependentVaraiables = (namesOfColumns *)calloc(sizeof(namesOfColumns), 1);
+-    (v.ptrAllResultingDependentVaraiables + JDLOCAL)->jdlocal = v.resultJDLOCAL;
+-    (v.ptrAllResultingDependentVaraiables + ZENITHDISTANCE)->zenithdistance = v.eventParameter;   //ZENITHDISTANCE Becomes the \
+-    aspirational value as presented via the -e command line parameter. With zenithdistance there are not sudden downward jumps \
+-    toward zeron when we've reached the “modulo limit”
+-    /*
+-     if ( (v.ptrAllResultingDependentVaraiables + ERA)->era >= ERA_MODULO360 )  \
+-     (v.ptrAllResultingDependentVaraiables + ERA)->era -= ERA_MODULO360;  //Back-out the modulous if necessary
+-     */
+-    v.buf.reserve(1500); //Without this the capacity of the v.buf is 22 characters.
+-    v.buf.clear(); //Make sure this c++ buffer is clean
+-    if(v.db2__) {
+-        cout << "The max size v.buf can aspire to is: " << v.buf.max_size() << ",\nthe capacity of v.buf is: " << v.buf.capacity() << endl;
+-        cout << "After doing v.buf.reserve(1500), the capacity of v.buf is now: " << v.buf.max_size() << \
+-        " characters (i.e. 2^64), the capacity to whic v.buf can aspire is: " << v.buf.capacity() << " characters." << endl;
+-    } //
+-    v.buf += v.insertIntoStart; //Initialize v.buf with the “INSERT INTO … blah, blah, blah” SQL ”INSERT INTO“  preliminaries
+-    v.ptrToGregorian = julianToGregorian(&v.resultJDLOCAL, 0) ; //julianToGregorian is a recently (2020-12-02) added dylib. Perhaps \
+-    I should add gregorianToJuian to my dylib library?
+-    //    v.buf = v.ptrToGregorian; //Convert the pointer-to-cString to a c++ string in buf. buf is an accumulator of c++ strings
+-    if (v.db2__) cout << "01. v.ptrToGregorian looks like: " << v.ptrToGregorian << endl;
+-    v.buf += string(v.ptrToGregorian); // + "', "; // need to convert v.ptrToGregorian from type c-string to type c++string. Then \
+-    begin accumulating the results of each "Chebyshev'd" parameter in a c++ string buffer named buf, separating each parameter with \
+-    a comma.
+-    v.buf += "', ";
+-    (v.ptrAllResultingDependentVaraiables + SITEID)->siteid = (v.allFetchedData + SITEID)->siteid;  //SITEID doesn't change
++        v.ptr_eP->modulous = 0; //zenithdistance, the parameter that determines sunrise or sunset, has no modulus
++        v.ptr_eP = &v.myEvents[SUNSET];
++        v.eventParameter = atof(ZENITHDISTANCE_SR_OR_SS);
++        //The “callocing” of arrays ptrArrayDependent and ptrArrayIndependent, is now done in goExecuteSomeSQL.cpp
++        //    v.ptrArrayDependent = (myParameters *)calloc(sizeof(myParameters), v.numberOfRows); //jdlocal will be in ArrayDependent
++        //    v.ptrArrayIndependent = (myParameters *)calloc(sizeof(myParameters), v.numberOfRows); // Either era, gast, last, zenithdistance \
++        [sunrise, sunset, noon], or geocentricra [summer, fall, winter, spring] will be in arrayIndepented because we want to find the \
++        specific time, jdlocal, when era=360, gast = 24 hours, last = 24 hours, zenithdistance=90.5833… [sunrise or sunset], \
++        zenithdistance is a minimum value [noon], geocentricra is 6 [summer], 12 [fall/autumn], 18 [winter], or 0 [spring].  \
++        To accomplish this we set the independent variable (zenithdistance) to 90.5833 and then provide doChebyshev, for performing \
++        Chebyshev Polynomial Interpolation, with the jdlocal values surrounding the location where what we believe the sought-after \
++        gast value lies.
++        //     NOTE that zenithdistance decreases as we approach time of sunrise (zenithdistance === 90.5833) and keeps decreasing until we reach noon
++        //     at which point zenithdistance begins to increase again. Then, half-a-day-later (~ 12 hours),  zenith distance begins to decrease again.
++        //     For sunrise and sunset processing, we will rely upon the SQL SELECT statement, that collected the data, that this function will have the data
+     
+     
+-    
+-    //Move all the returned topocentricra data, scattered around multicolumn array allFetchedData into the single column array, \
+-    as demanded by the gsl Chebyschev Polynomial Interpolation Routine, pointed to by ptrArrayDependent. This single column array, \
+-    calloced above, will be used over-and-over to contain the many various dependent variables.
+-    
+-    
+-    
+-    //-->TOPOCENTRICRA is Modulous 24 and rolls-over once per year
+-    doInterpolation(v, TOPOCENTRICRA, "02 TOPOCENTRICRA ", v.ptrC, TOPOCENTRICRA_MODULO24);
+-    //TOPOCENTRICDEC ranges between +23.4… degrees and -23.4… degrees and becomes zero at Vernal Equinox (Spring)
+-    doInterpolation(v, TOPOCENTRICDEC, "03 TOPOCENTRICDEC ", v.ptrC, 0);
+-    //TOPOCENTRICDIS
+-    doInterpolation(v, TOPOCENTRICDIS, "04 TOPOCENTRICDIS ", v.ptrC, 0);
+-    //-->AZIMUTH is Modulous 360 and rolls-over daily
+-    doInterpolation(v, AZIMUTH, "05 AZIMUTH ", v.ptrC, AZIMUTH_MODULO360);
+-    //ZENITHDISTANCE
+-    // --  doInterpolation(v, ZENITHDISTANCE, "06 ZENITHDISTANCE ", v.ptrC, 0);  //This is what we did for processERA, upon which processSR is based.
+-    v.workbuf[ZENITHDISTANCE]=ZENITHDISTANCE_SR_OR_SS; // Now ZENITHDISTANCE, the sixth (06) column in table named \
+-    “tbl_sun_loc_site” of database named “LocalWeather”,  is what we specified it to be
+-    if (v.db2__) cout << "06 ZENITHDISTANCE " << v.workbuf[ZENITHDISTANCE] << endl;
+-    v.buf += v.workbuf[ZENITHDISTANCE];
+-    v.buf += ", ";
+-    //-->GEOCENTRICRA is Modulous 24 and rolls-over once per year
+-    doInterpolation(v, GEOCENTRICRA, "07 GEOCENTRICRA ", v.ptrC, GEOCENTRICRA_MODULO24);
+-    //GEOCENTRICDEC
+-    doInterpolation(v, GEOCENTRICDEC, "08 GEOCENTRICDEC ", v.ptrC, 0);
+-    //GEOCENTRICDIS
+-    doInterpolation(v, GEOCENTRICDIS, "09 GEOCENTRICDIS ", v.ptrC, 0);
+-    //JDUTC
+-    doInterpolation(v, JDUTC, "10 JDUTC ", v.ptrC, 0);
+-    //JDLOCAL ONLY ONE VALUE HERE BECAUSE we are looking for just one value of jdlocal, the jdlocal time when ERA === 0
+-    v.workbuf[JDLOCAL] = to_string_with_precision(v.resultJDLOCAL, v.DESIRED_MAX_PRECISION);    //Convert double to c++ string of \
+-    15 digit precision
+-    if (v.db2__) cout << "11 JDLOCAL " << v.workbuf[JDLOCAL] << endl;
+-    v.buf += v.workbuf[JDLOCAL]; //Concatenate onto buf
+-    v.buf += ", ";
+-    //SITEID ONLY ONE VALUE HERE BECAUSE we process only one value of siteid.
+-    v.workbuf[SITEID] = string(v.ptrWhatThisSiteIdIs); //Convert c-string to c++ string
+-    if (v.db2__) cout << "12 SITEID " << v.workbuf[SITEID] << endl;
+-    v.buf += v.workbuf[SITEID];        //Concatenate onto buf
+-    v.buf += ", ";
+-    //-->ERA is a Modulous 360 parameter  ONLY ONE VALUE HERE BECAUSE we are looking for predefined value ERA = 0.
+-    //    if(v.eventParameter >= ERA_MODULO360) v.eventParameter -= ERA_MODULO360; //IF necessary, BackOut the modulous
+-    //    v.workbuf[ERA] = to_string(v.eventParameter);  //Convert double to c++ string of 15 digit precision
+-    //    if (v.db2__) cout << "13 ERA " << v.workbuf[ERA] << endl;
+-    //    v.buf += v.workbuf[ERA]; //Concatenate ERA onto buf
+-    //    v.buf += ", ";
+-    doInterpolation(v, ERA_, "13 ERA ", v.ptrC, ERA_MODULO360);
+-    //-->LAST is a Modulous 24 parameter
+-    doInterpolation(v, LAST_, "14 LAST ", v.ptrC, LAST_MODULO24);
+-    //-->GAST is a Modulous 24 parameter
+-    doInterpolation(v, GAST_, "15 GAST ", v.ptrC, GAST_MODULO24);
+-    //VCELX
+-    doInterpolation(v, VCELX, "16 VCELX ", v.ptrC, 0);
+-    //VCELY
+-    doInterpolation(v, VCELY, "17 VCELY ", v.ptrC, 0);
+-    //VCELZ
+-    doInterpolation(v, VCELZ, "18 VCELZ ", v.ptrEndCap, 0);
+-    //Like `v.iI = v.intermediateConnectionString.c_str();`,  convert the c++ string object into a legacy c-string array \
+-    of characters, which is what the PostgreSQL prefers because the PostgreSQL libpq routines are written in standard, legacy, C \
+-    and knows nothing about c++ objects and other complexities.
+-    v.iI = v.buf.c_str(); //Covert the c++ string to ordinary c-string because PostgreSQL database DOES NOT understand c++ strings!
+-    if (v.db2__) {
+-        cout <<   "v.numberOfEntries: " << v.numberOfEntries  << "\nv.numberOf_BS_Entries: " << v.numberOf_BS_Entries << endl;
+-        cout << "The size of v.buf is " << v.buf.size() << " characters " << endl;
+-    }
+-    v.charactersWrittenToFile += fwrite(v.iI, 1, strlen(v.iI), v.fp); // Output into the output file the \
+-    first logical record, the INSERT INTO statement.
+-    if (v.executeTheSQL) doExecSQL(v, v.iI, PGRES_COMMAND_OK, true);
+-    freeCallocdMemory(v);
+-    return 0;
++        for (v.i=0; v.i < v.numberOfRows; v.i++) { // +1
++            if ( v.i > 0 && (fabs((v.allFetchedData  + v.i)->zenithdistance < fabs((v.allFetchedData + v.i -1)->zenithdistance)) ) ) { //If current \
++                value is less than previous independent value, then add modulus to the current value, thus satisfying \
++                gsl interpolation routine's requirement that arrays be monotonically increasing.
++                (v.allFetchedData + v.i)->zenithdistance  += (double)v.ptr_eP->modulous; //Should NEVER NEED TO DO THIS FOR SR OR SS \
++                events; in fact (double)v.ptr_eP->modulous should be set to zero for SR or SS
++            } else {
++                (v.ptrArrayIndependent + v.i)->dbl_value   = (v.allFetchedData + v.i)->zenithdistance;
++            }  // end of if/else
++            (v.ptrArrayIndependent + v.i)->index = v.i;
++            (v.ptrArrayDependent + v.i)->dbl_value     = (v.allFetchedData + v.i)->jdlocal;
++            (v.ptrArrayDependent + v.i)->index = v.i;
++        }     // -1 End of for loop
++        
++        //
++        //
++        //        points to array of associated dependent variables -------------------------------------------+
++        //        points to array of independent variables ---------------------------------+                  |
++        //        points to THE desired independent variable -------+                       |                  |
++        //        points to chebyshev order -----+                  |                       |                  |
++        //        points to class --+            |                  |                       |                  |
++        //                          |            |                  |                       |                  |
++        //                          V            V                  V                       V                  V
++        v.resultJDLOCAL=doChebyshev(v,    v.numberOfRows, &v.eventParameter, v.ptrArrayIndependent, v.ptrArrayDependent);
++        free(v.ptrArrayIndependent); //Free array of independent variables, containing a 1D array of nolonger needed zenithdistances
++        v.ptrArrayIndependent = v.ptrArrayDependent; //ReAssign v.ptrArrayIndependent to point to the array of jdlocal times which \
++        WAS in the array of Dependent Varaibles (v.ptrArrayDependent)
++        //At this point v.resultingDependentVariable points to the local time, in julian day format. This time will become the the \
++        independent variable;
++        v.ptrArrayDependent = (myParameters *)calloc(sizeof(myParameters), v.numberOfRows); //Now reAllocate a new \
++        Array of Dependent Variables
++        //   free(v.ptrArrayIndependent); //Free this because we won't be needing to point to an array of zenithdistance values because \
++        there is only ONE zenith distance value we will use and that's what's in v.eventParameter and v.resultJDLOCAL is the local time \
++        that we achieved the desired value of ZENITHDISTANCE_SR_OR_SS.
++        v.ptrIndependentVariable = &v.resultingDependentVariable; //From now on, make jdlocal the independent variable
++        
++        
++        
++        v.ptrAllResultingDependentVaraiables = (namesOfColumns *)calloc(sizeof(namesOfColumns), 1);
++        (v.ptrAllResultingDependentVaraiables + JDLOCAL)->jdlocal = v.resultJDLOCAL;
++        (v.ptrAllResultingDependentVaraiables + ZENITHDISTANCE)->zenithdistance = v.eventParameter;   //ZENITHDISTANCE Becomes the \
++        aspirational value as presented via the -e command line parameter. With zenithdistance there are not sudden downward jumps \
++        toward zeron when we've reached the “modulo limit”
++        /*
++         if ( (v.ptrAllResultingDependentVaraiables + ERA)->era >= ERA_MODULO360 )  \
++         (v.ptrAllResultingDependentVaraiables + ERA)->era -= ERA_MODULO360;  //Back-out the modulous if necessary
++         */
++        v.buf.reserve(1500); //Without this the capacity of the v.buf is 22 characters.
++        v.buf.clear(); //Make sure this c++ buffer is clean
++        if(v.db2__) {
++            cout << "The max size v.buf can aspire to is: " << v.buf.max_size() << ",\nthe capacity of v.buf is: " << v.buf.capacity() << endl;
++            cout << "After doing v.buf.reserve(1500), the capacity of v.buf is now: " << v.buf.max_size() << \
++            " characters (i.e. 2^64), the capacity to whic v.buf can aspire is: " << v.buf.capacity() << " characters." << endl;
++        } //
++        v.buf += v.insertIntoStart; //Initialize v.buf with the “INSERT INTO … blah, blah, blah” SQL ”INSERT INTO“  preliminaries
++        v.ptrToGregorian = julianToGregorian(&v.resultJDLOCAL, 0) ; //julianToGregorian is a recently (2020-12-02) added dylib. Perhaps \
++        I should add gregorianToJuian to my dylib library?
++        //    v.buf = v.ptrToGregorian; //Convert the pointer-to-cString to a c++ string in buf. buf is an accumulator of c++ strings
++        if (v.db2__) cout << "01. v.ptrToGregorian looks like: " << v.ptrToGregorian << endl;
++        v.buf += string(v.ptrToGregorian); // + "', "; // need to convert v.ptrToGregorian from type c-string to type c++string. Then \
++        begin accumulating the results of each "Chebyshev'd" parameter in a c++ string buffer named buf, separating each parameter with \
++        a comma.
++        v.buf += "', ";
++        (v.ptrAllResultingDependentVaraiables + SITEID)->siteid = (v.allFetchedData + SITEID)->siteid;  //SITEID doesn't change
++        
++
++        
++//Move all the returned topocentricra data, scattered around multicolumn array allFetchedData into the single column array, \
++as demanded by the gsl Chebyschev Polynomial Interpolation Routine, pointed to by ptrArrayDependent. This single column array, \
++calloced above, will be used over-and-over to contain the many various dependent variables.
++        
++        
++        
++        //-->TOPOCENTRICRA is Modulous 24 and rolls-over once per year
++        doInterpolation(v, TOPOCENTRICRA, "02 TOPOCENTRICRA ", v.ptrC, TOPOCENTRICRA_MODULO24);
++        //TOPOCENTRICDEC ranges between +23.4… degrees and -23.4… degrees and becomes zero at Vernal Equinox (Spring)
++        doInterpolation(v, TOPOCENTRICDEC, "03 TOPOCENTRICDEC ", v.ptrC, 0);
++        //TOPOCENTRICDIS
++        doInterpolation(v, TOPOCENTRICDIS, "04 TOPOCENTRICDIS ", v.ptrC, 0);
++        //-->AZIMUTH is Modulous 360 and rolls-over daily
++        doInterpolation(v, AZIMUTH, "05 AZIMUTH ", v.ptrC, AZIMUTH_MODULO360);
++        //ZENITHDISTANCE
++        // --  doInterpolation(v, ZENITHDISTANCE, "06 ZENITHDISTANCE ", v.ptrC, 0);  //This is what we did for processERA, upon which processSR is based.
++        v.workbuf[ZENITHDISTANCE]=ZENITHDISTANCE_SR_OR_SS; // Now ZENITHDISTANCE, the sixth (06) column in table named \
++        “tbl_sun_loc_site” of database named “LocalWeather”,  is what we specified it to be
++        if (v.db2__) cout << "06 ZENITHDISTANCE " << v.workbuf[ZENITHDISTANCE] << endl;
++        v.buf += v.workbuf[ZENITHDISTANCE];
++        v.buf += ", ";
++        //-->GEOCENTRICRA is Modulous 24 and rolls-over once per year
++        doInterpolation(v, GEOCENTRICRA, "07 GEOCENTRICRA ", v.ptrC, GEOCENTRICRA_MODULO24);
++        //GEOCENTRICDEC
++        doInterpolation(v, GEOCENTRICDEC, "08 GEOCENTRICDEC ", v.ptrC, 0);
++        //GEOCENTRICDIS
++        doInterpolation(v, GEOCENTRICDIS, "09 GEOCENTRICDIS ", v.ptrC, 0);
++        //JDUTC
++        doInterpolation(v, JDUTC, "10 JDUTC ", v.ptrC, 0);
++        //JDLOCAL ONLY ONE VALUE HERE BECAUSE we are looking for just one value of jdlocal, the jdlocal time when ERA === 0
++        v.workbuf[JDLOCAL] = to_string_with_precision(v.resultJDLOCAL, v.DESIRED_MAX_PRECISION);    //Convert double to c++ string of \
++        15 digit precision
++        if (v.db2__) cout << "11 JDLOCAL " << v.workbuf[JDLOCAL] << endl;
++        v.buf += v.workbuf[JDLOCAL]; //Concatenate onto buf
++        v.buf += ", ";
++        //SITEID ONLY ONE VALUE HERE BECAUSE we process only one value of siteid.
++        v.workbuf[SITEID] = string(v.ptrWhatThisSiteIdIs); //Convert c-string to c++ string
++        if (v.db2__) cout << "12 SITEID " << v.workbuf[SITEID] << endl;
++        v.buf += v.workbuf[SITEID];        //Concatenate onto buf
++        v.buf += ", ";
++        //-->ERA is a Modulous 360 parameter  ONLY ONE VALUE HERE BECAUSE we are looking for predefined value ERA = 0.
++        //    if(v.eventParameter >= ERA_MODULO360) v.eventParameter -= ERA_MODULO360; //IF necessary, BackOut the modulous
++        //    v.workbuf[ERA] = to_string(v.eventParameter);  //Convert double to c++ string of 15 digit precision
++        //    if (v.db2__) cout << "13 ERA " << v.workbuf[ERA] << endl;
++        //    v.buf += v.workbuf[ERA]; //Concatenate ERA onto buf
++        //    v.buf += ", ";
++        doInterpolation(v, ERA_, "13 ERA ", v.ptrC, ERA_MODULO360);
++        //-->LAST is a Modulous 24 parameter
++        doInterpolation(v, LAST_, "14 LAST ", v.ptrC, LAST_MODULO24);
++        //-->GAST is a Modulous 24 parameter
++        doInterpolation(v, GAST_, "15 GAST ", v.ptrC, GAST_MODULO24);
++        //VCELX
++        doInterpolation(v, VCELX, "16 VCELX ", v.ptrC, 0);
++        //VCELY
++        doInterpolation(v, VCELY, "17 VCELY ", v.ptrC, 0);
++        //VCELZ
++        doInterpolation(v, VCELZ, "18 VCELZ ", v.ptrEndCap, 0);
++        //Like `v.iI = v.intermediateConnectionString.c_str();`,  convert the c++ string object into a legacy c-string array \
++        of characters, which is what the PostgreSQL prefers because the PostgreSQL libpq routines are written in standard, legacy, C \
++        and knows nothing about c++ objects and other complexities.
++        v.iI = v.buf.c_str(); //Covert the c++ string to ordinary c-string because PostgreSQL database DOES NOT understand c++ strings!
++        if (v.db2__) {
++            cout <<   "v.numberOfEntries: " << v.numberOfEntries  << "\nv.numberOf_BS_Entries: " << v.numberOf_BS_Entries << endl;
++            cout << "The size of v.buf is " << v.buf.size() << " characters " << endl;
++        }
++        v.charactersWrittenToFile += fwrite(v.iI, 1, strlen(v.iI), v.fp); // Output into the output file the \
++        first logical record, the INSERT INTO statement.
++        if (v.executeTheSQL) doExecSQL(v, v.iI, PGRES_COMMAND_OK, true);
++        if (v.ptrArrayIndependent) free(v.ptrArrayIndependent);   //This was acquired in function goExecuteSomeSQL
++        v.ptrArrayIndependent = nullptr;
++        if (v.ptrArrayDependent) free(v.ptrArrayDependent); //This was acquired in function goExecuteSomeSQL
++        v.ptrArrayDependent = nullptr;
++        if (v.ptrAllResultingDependentVaraiables) free(v.ptrAllResultingDependentVaraiables); //This memory was acquired in this function
++        v.ptrAllResultingDependentVaraiables = nullptr;
++        return 0;
+ } //End of processSS
+ 
+ int doNoonMin(Constants &v, void* myb) {
+     ;
+-    v.Constants::some2Darray = (char **)v.noonArray;
++    v.some2Darray = v.noonArray[0];
+     v.some1Darray = (char *)v.ptrSQLTemplateNOON;
+     v.some1DArraySize = (int)strlen(v.ptrSQLTemplateNOON);
+     v.some2DArraySize = sizeof(v.noonArray);
+@@ -1093,7 +977,7 @@ int getTuples(Constants &c, bool output, bool doPQclear) {
+         c.rc = -(30+1); //Set Negative, bad, return code.
+         return (c.rc); //Quit
+     }
+-    c.allFetchedData = (namesOfColumns *)calloc(c.numberOfRows, sizeof(namesOfColumns));
++    c.allFetchedData = (namesOfColumns *)calloc(c.numberOfRows, sizeof(namesOfColumns)); 
+     c.k = sizeof(namesOfColumns);
+     for (c.i=0; c.i < c.numberOfRows; c.i++) {
+         if (c.i%c.modulo_lines_perPage == 0) printf("%s\n", c.titles); //Print-out the title-line per modulo_lines_perPage.
+@@ -1231,35 +1115,27 @@ int getTuples(Constants &c, bool output, bool doPQclear) {
+     return c.rc;
+ } //End of getTuples
+ void reviewDo(Constants& v, string s) {
+-    /*
+-     size_t work4 = sizeof(v.sunTemplate4Seasons[0][0]);   //work4 = 8
+-     cout << "Start Addr. --> hex value of v.some2Darray looks like: " << std::hex << v.some2Darray << std::dec << \
+-     "sizeof((char *)v.some2Darray is: " << work4 << " bytes." << \
+-     "\nStart Addr. --> hex value of v.sunTemplate4Seasons[0][0] looks like: " << std::hex << v.sunTemplate4Seasons[0][0] << \
+-     std::dec << ". sizeof((char *)v.sunTemplate4Seasons[0][0] is: " << work4 << " bytes." << endl;
+-     */
+     v.j=0;
+     cout << "In function " << s << ". v.some2Darray looks like: " << endl;
+-    while ( 1 ) {
+-        if (v.j == SOMETHINGREASONABLYLARGE) {
+-            cout << "Terminating because we never found this array’s TERM after " << SOMETHINGREASONABLYLARGE << " attempts!" << endl;
+-            exit (-3);
+-        }
+-        cout <<  v.j << ". "  << **(char ***)(v.some2Darray + (v.j + 0)) << ", " << **(char ***)(v.some2Darray + (v.j + 1)) << std::dec << std::endl;
+-        if ( strcmp(**(char ***)(v.some2Darray + (v.j +0)),  v.ptrThisTerm) == 0)  { //Have we reached the end of this 2D array?
+-            v.some2DArraySize = v.j + NUMBEROFCOLUMNSIN2DARRAY;    //Set the number of rows of this 2D array
+-            break;
++        while ( 1 ) {
++            if (v.j == SOMETHINGREASONABLYLARGE) {
++                cout << "Terminating because we never found this array’s TERM after " << SOMETHINGREASONABLYLARGE << " attempts!" << endl;
++                exit (-3);
++            }
++            cout << v.j << ". " << **((v.some2Darray + v.j) +0)<< ", " << **((v.some2Darray + v.j) +1)<< endl;
++            if ( strcmp(**((v.some2Darray + v.j) +0),  v.ptrThisTerm) == 0)  { //Have we reached the end of this 2D array?
++                v.some2DArraySize = v.j + NUMBEROFCOLUMNSIN2DARRAY;    //Set the number of rows of this 2D array
++                break;
++            }
++            v.j += NUMBEROFCOLUMNSIN2DARRAY;
+         }
+-        v.j += NUMBEROFCOLUMNSIN2DARRAY;
+-    }
+     v.numberOfArrayRows = (unsigned int)v.some2DArraySize/2;
+     v.numberOf2Dentries = v.numberOfArrayRows;
+     cout << "Two-dimensional array, named some2Darray, contains " << v.some2DArraySize << " pointer entries, or consists of " << \
+     v.numberOfArrayRows << " rows of pointers @ 2 pointers per row." << endl;
+     cout << "v.some1Darray looks like: " << endl;
+     cout << (v.some1Darray) << endl;
+-    cout << "v.some1DarraySize: " << std::dec << v.some1DArraySize << " characters, forming our SQL SELECT template." << endl;
+-    cout << "  End--> hex value of v.some2Darray looks like: " << std::hex << v.some2Darray << std::dec << endl;
++    cout << "v.some1DarraySize: " << v.some1DArraySize << " characters, forming our SQL SELECT template." << endl;
+ } //End of reviewDo
+ int executeSomeSQL(Constants& c, const char *sql, bool doClear) {
+     executeSQL((char *)sql, c.dbc);
+@@ -1501,87 +1377,87 @@ void doExecSQL(Constants& c, const char *someSQL, int expectedOKStatus, bool doP
+ // doInterpolation(v, TOPOCENTRICRA, “01 TOPOCENTRICRA”, “, “, TOPOCENTRICRA_MODULO24);
+ 
+ void doInterpolation(Constants& v, int dependentVariableIndex, string msg, string finalBuf, double someModulo) {
+-    //                                                            We ***ASSUME*** that the ptrArrayDependent has already been allocated
++
+     for (v.i=0;  v.i < v.numberOfRows; v.i++) {
+         switch (dependentVariableIndex) {
+             case TOPOCENTRICRA:
+-                
+-                (v.ptrArrayDependent   + v.i)->dbl_value  = (v.allFetchedData + v.i)->topocentricra;
+-                
++
++                    (v.ptrArrayDependent   + v.i)->dbl_value  = (v.allFetchedData + v.i)->topocentricra;
++
+                 break;
+             case TOPOCENTRICDEC:
+-                
+-                (v.ptrArrayDependent   + v.i)->dbl_value  = (v.allFetchedData + v.i)->topocentricdec;
+-                
++
++                    (v.ptrArrayDependent   + v.i)->dbl_value  = (v.allFetchedData + v.i)->topocentricdec;
++
+                 break;
+             case TOPOCENTRICDIS:
+-                
+-                (v.ptrArrayDependent   + v.i)->dbl_value  = (v.allFetchedData + v.i)->topocentricdis;
+-                
++
++                    (v.ptrArrayDependent   + v.i)->dbl_value  = (v.allFetchedData + v.i)->topocentricdis;
++ 
+                 break;
+             case AZIMUTH:
+-                
+-                (v.ptrArrayDependent   + v.i)->dbl_value  = (v.allFetchedData + v.i)->azimuth;
+-                
++
++                    (v.ptrArrayDependent   + v.i)->dbl_value  = (v.allFetchedData + v.i)->azimuth;
++
+                 break;
+             case ZENITHDISTANCE:
+-                
+-                (v.ptrArrayDependent   + v.i)->dbl_value  = (v.allFetchedData + v.i)->zenithdistance;
+-                
++ 
++                    (v.ptrArrayDependent   + v.i)->dbl_value  = (v.allFetchedData + v.i)->zenithdistance;
++
+                 break;
+             case GEOCENTRICRA:
+-                
+-                (v.ptrArrayDependent   + v.i)->dbl_value  = (v.allFetchedData + v.i)->geocentricra;
+-                
++ 
++                    (v.ptrArrayDependent   + v.i)->dbl_value  = (v.allFetchedData + v.i)->geocentricra;
++
+                 break;
+             case GEOCENTRICDEC:
+-                
+-                (v.ptrArrayDependent   + v.i)->dbl_value  = (v.allFetchedData + v.i)->geocentricdec;
++
++                    (v.ptrArrayDependent   + v.i)->dbl_value  = (v.allFetchedData + v.i)->geocentricdec;
+                 break;
+             case GEOCENTRICDIS:
+-                
+-                (v.ptrArrayDependent   + v.i)->dbl_value  = (v.allFetchedData + v.i)->geocentricdis;
+-                
++ 
++                    (v.ptrArrayDependent   + v.i)->dbl_value  = (v.allFetchedData + v.i)->geocentricdis;
++
+                 break;
+             case JDUTC:
+-                
+-                (v.ptrArrayDependent   + v.i)->dbl_value  = (v.allFetchedData + v.i)->jdutc;
+-                
++ 
++                    (v.ptrArrayDependent   + v.i)->dbl_value  = (v.allFetchedData + v.i)->jdutc;
++
+                 break;
+             case JDLOCAL:
+-                
+-                (v.ptrArrayDependent   + v.i)->dbl_value  = (v.allFetchedData + v.i)->jdlocal;
+-                
++  
++                    (v.ptrArrayDependent   + v.i)->dbl_value  = (v.allFetchedData + v.i)->jdlocal;
++ 
+                 break;
+             case ERA_:
+-                
+-                (v.ptrArrayDependent   + v.i)->dbl_value  = (v.allFetchedData + v.i)->era;
+-                
++ 
++                    (v.ptrArrayDependent   + v.i)->dbl_value  = (v.allFetchedData + v.i)->era;
++
+                 break;
+             case LAST_:
+-                
+-                (v.ptrArrayDependent   + v.i)->dbl_value  = (v.allFetchedData + v.i)->last;
+-                
++
++                    (v.ptrArrayDependent   + v.i)->dbl_value  = (v.allFetchedData + v.i)->last;
++
+                 break;
+             case GAST_:
+-                
+-                (v.ptrArrayDependent   + v.i)->dbl_value  = (v.allFetchedData + v.i)->gast;
+-                
++
++                    (v.ptrArrayDependent   + v.i)->dbl_value  = (v.allFetchedData + v.i)->gast;
++
+                 break;
+             case VCELX:
+-                
+-                (v.ptrArrayDependent   + v.i)->dbl_value  = (v.allFetchedData + v.i)->vcelx;
+-                
+-                break;
++
++                    (v.ptrArrayDependent   + v.i)->dbl_value  = (v.allFetchedData + v.i)->vcelx;
++
++                 break;
+             case VCELY:
+-                
+-                (v.ptrArrayDependent   + v.i)->dbl_value  = (v.allFetchedData + v.i)->vcely;
+-                
++
++                    (v.ptrArrayDependent   + v.i)->dbl_value  = (v.allFetchedData + v.i)->vcely;
++ 
+                 break;
+             case VCELZ:
+-                
+-                (v.ptrArrayDependent   + v.i)->dbl_value  = (v.allFetchedData + v.i)->vcelz;
+-                
++
++                    (v.ptrArrayDependent   + v.i)->dbl_value  = (v.allFetchedData + v.i)->vcelz;
++ 
+                 break;
+             default:
+                 cerr << "LINE " << __LINE__ << ", of file " << __FILE__  << ", compiled on " << __DATE__ << "T" << __TIME__ << \
+@@ -1590,8 +1466,8 @@ void doInterpolation(Constants& v, int dependentVariableIndex, string msg, strin
+                 exit (BAD_doInterpolation_PARAMETER);
+                 
+         }
+-        //        (v.ptrArrayDependent   + v.i)->dbl_value  = (v.allFetchedData + v.i)->topocentricra;
+-        //        (v.ptrArrayDependent   + v.i)->index = v.i;
++//        (v.ptrArrayDependent   + v.i)->dbl_value  = (v.allFetchedData + v.i)->topocentricra;
++//        (v.ptrArrayDependent   + v.i)->index = v.i;
+     }
+     //    if (v.ongoingResult >= TOPOCENTRICRA_MODULO24) v.ongoingResult -= TOPOCENTRICRA_MODULO24;
+     if ( (someModulo > 0) && (v.ongoingResult >= someModulo) ) v.ongoingResult -= someModulo; //Make sure good data is going in.
